@@ -1,0 +1,47 @@
+* {
+    font-family: sans-serif;
+    font-size: 14px;
+}
+
+#mydiv {
+    display: flex;
+    justify-content: space-evenly;
+    align-items: center;
+    height: 100vh;
+}
+
+#form table {
+    box-shadow: 2px 2px 10px 2px rgb(140, 140, 140);
+    padding: 10px;
+    border-radius: 10px;
+}
+
+#form td {
+    padding: 3px;
+}
+
+#depts table {
+    border: 1px solid black;
+    border-collapse: collapse;
+}
+
+#depts th,
+#depts td {
+    border: 1px solid black;
+    padding: 5px 10px;
+}
+
+.submit {
+    height: 25px;
+    width: 100px;
+    color: white;
+    background-color: blue;
+    font-size: 15px;
+    border-style: none;
+    border-radius: 5px;
+}
+
+.submit:hover {
+    transform: scale(1.02);
+    background-color: rgb(50, 50, 230);
+}

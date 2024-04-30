@@ -1,0 +1,76 @@
+* {
+    font-family: sans-serif;
+    font-size: 14px;
+}
+
+#mydiv{
+    position: relative;
+    margin-left: 200px;
+}
+
+#warnings{
+    position: relative;
+    margin-left: 200px;
+    padding-top: 20px;
+}
+
+table a {
+    color: rgb(46, 55, 180);
+    text-decoration: none;
+}
+
+table a:hover {
+    color: rgb(129, 137, 247);
+    text-decoration: none;
+}
+
+table {
+    border-collapse: collapse;
+}
+
+th{
+    border: 1px solid rgb(80, 79, 79);
+    padding: 5px 10px;
+}
+
+td{
+    border-bottom: 1px solid rgb(145, 144, 144);
+    padding: 5px 10px;
+}
+
+tr>th:nth-child(3) {
+    width: 250px;
+}
+tr>th:nth-child(4) {
+    width: 150px;
+}
+tr>th:nth-child(5) {
+    width: 100px;
+}
+tr>th:nth-child(6) {
+    width: 100px;
+}
+
+tr>td:nth-child(3) {
+    width: 250px;
+}
+tr>td:nth-child(4) {
+    width: 150px;
+}
+tr>td:nth-child(5) {
+    width: 100px;
+}
+tr>td:nth-child(6) {
+    width: 100px;
+}
+
+tr > td:nth-child(even){
+    background-color: rgb(235, 244, 244);
+}
+tbody > tr:nth-child(odd){
+    background-color: rgb(244, 244, 244);
+}
+
+#btn1 {
+    margin-left: 10px;
+}
