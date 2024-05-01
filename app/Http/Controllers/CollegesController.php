@@ -40,7 +40,7 @@ class CollegesController extends Controller
         $address = DB::select('select * from addresses where address_id = (select address_id from colleges where college_id = ?)', [$id]);
         return view('CollegeDetails', ["address" => $address, "college" => $college]);
     }
-    
+
     public function updateClgForm(Request $request)
     {
         $id = json_decode(urldecode($request->input('data')), true);
@@ -66,30 +66,31 @@ class CollegesController extends Controller
     }
     public function deleteColleges(Request $request)
     {
-        $decodedata = json_decode(urldecode($request->input('data')), true);
-        foreach ($decodedata as $id) {
-            $students = StudentsModel::where('college_id', $id)->get();
-            foreach($students as $student) {
-                $student->delete();
-            }
-            $staffs = StaffsModel::where('college_id', $id)->get();
-            foreach($staffs as $staff) {
-                $staff->delete();
-            }
-            $departments = DepartmentsModel::where('college_id', $id)->get();
-            foreach($departments as $department) {
-                $department->delete();
-            }
-            $address_id = DB::select('select address_id from colleges where college_id = ?', [$id]);
-            $aid = $address_id[0]->address_id;
-            $address = AddressesModel::find($aid);
-            if(!empty($address)) {
-                $address->delete();
-            }
-            $college = CollegesModel::find($id);
-            if(!empty($college)) {
-                $college->delete();
-            }
+        $id = json_decode(urldecode($request->input('data')), true);
+
+        $students = StudentsModel::where('college_id', $id)->get();
+        foreach ($students as $student) {
+            $student->delete();
+        }
+
+        $staffs = StaffsModel::where('college_id', $id)->get();
+        foreach ($staffs as $staff) {
+            $staff->delete();
+        }
+
+        $departments = DepartmentsModel::where('college_id', $id)->get();
+        foreach ($departments as $department) {
+            $department->delete();
+        }
+        $address_id = DB::select('select address_id from colleges where college_id = ?', [$id]);
+        $aid = $address_id[0]->address_id;
+        $address = AddressesModel::find($aid);
+        if (!empty($address)) {
+            $address->delete();
+        }
+        $college = CollegesModel::find($id);
+        if (!empty($college)) {
+            $college->delete();
         }
         return redirect()->back()->with('success', 'deleted college details suceessfully!');
     }

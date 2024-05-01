@@ -7,7 +7,6 @@ use App\Models\DepartmentsModel;
 use App\Models\StaffsModel;
 use App\Models\StudentsModel;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\DB;
 
 class DepartmentsController extends Controller
 {
@@ -60,19 +59,19 @@ class DepartmentsController extends Controller
     }
     public function deleteDepartments(Request $request)
     {
-        $decodedata = json_decode(urldecode($request->input('data')), true);
-        foreach ($decodedata as $id) {
-            $students = StudentsModel::where('dept_short_code', $id)->get();
-            foreach ($students as $student) {
-                $student->delete();
-            }
-            $staffs = StaffsModel::where('dept_short_code', $id)->get();
-            foreach ($staffs as $staff) {
-                $staff->delete();
-            }
-            $department = DepartmentsModel::find($id);
-            $department->delete();
+        $id = json_decode(urldecode($request->input('data')), true);
+
+        $students = StudentsModel::where('dept_short_code', $id)->get();
+        foreach ($students as $student) {
+            $student->delete();
         }
+        $staffs = StaffsModel::where('dept_short_code', $id)->get();
+        foreach ($staffs as $staff) {
+            $staff->delete();
+        }
+        $department = DepartmentsModel::find($id);
+        $department->delete();
+        
         return redirect()->back()->with('success', 'deleted college details suceessfully!');
     }
 }

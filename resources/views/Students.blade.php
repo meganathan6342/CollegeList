@@ -6,38 +6,63 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{{ $college->college_name }} Students</title>
     <link rel="stylesheet" href="{{ asset('css/style1.css') }}" />
+    <style>
+        a {
+            text-decoration: none;
+            color: white;
+            font-size: 17px;
+        }
+
+        #add-btn {
+            background-color: blue;
+            height: 27px;
+            width: 120px;
+            border-radius: 5px;
+            border-style: none;
+            transition: 200ms;
+        }
+
+        #add-btn:hover {
+            transform: scale(1.02);
+            background-color: rgb(0, 0, 230);
+        }
+
+        #search {
+            margin-left: 1010px;
+            height: 23px;
+        }
+    </style>
 </head>
 
 <body>
     <div id="mydiv" style="margin-left: 3px;">
         <h1>Students of {{ $college->college_name }} </h1>
-        <button id="btn1" class="btns">delete</button>
-        <button id="btn2" class="btns">edit</button><br><br>
-        <table>
+        <input type="text" id="search" onkeyup="searchData()" placeholder="Search">
+        <button id="add-btn"><a href="{{ route('students.form', ['id'=>$college->college_id]) }}">add student</a></button><br><br>
+        <table id="dataTable">
             <thead>
                 <tr>
-                    <th><input type="checkbox" id="selectAll" onchange="toggleCheckboxes(this)"></th>
                     <th>No.</th>
-                    <th>Student ID</th>
-                    <th>Student Name</th>
-                    <th>Student Gender</th>
-                    <th>Student DOB</th>
-                    <th>Student Mobile no.</th>
-                    <th>Student Address</th>
-                    <th>College Name</th>
-                    <th>Student Dept Name</th>
+                    <th style="width: 100px;">Student ID</th>
+                    <th style="width: 150px;">Student Name</th>
+                    <th style="width: 80px;">Student Gender</th>
+                    <th style="width: 80px;">Student DOB</th>
+                    <th style="width: 150px;">Student Mobile no.</th>
+                    <th style="width: 200px;">Student Address</th>
+                    <th style="width: 150px;">College Name</th>
+                    <th style="width: 100px;">Student Dept Name</th>
+                    <th style="width: 80px;">Action</th>
                 </tr>
             <tbody>
                 <?php $a = 1; ?>
                 @foreach($students as $student)
                 <tr>
-                    <td><input type="checkbox" value="{{$student->student_id}}" class="cb"></td>
                     <td><?php echo $a++; ?></td>
-                    <td>{{ $student->student_id }}</td>
-                    <td>{{ $student->student_name }}</td>
-                    <td>{{ $student->student_gender }}</td>
-                    <td>{{ \Carbon\Carbon::parse($student->student_dob)->age }}</td>
-                    <td>{{ $student->mobile_no }}</td>
+                    <td style="width: 100px;">{{ $student->student_id }}</td>
+                    <td style="width: 150px;">{{ $student->student_name }}</td>
+                    <td style="width: 80px;">{{ $student->student_gender }}</td>
+                    <td style="width: 80px;">{{ \Carbon\Carbon::parse($student->student_dob)->age }}</td>
+                    <td style="width: 150px;">{{ $student->mobile_no }}</td>
                     <td style="max-width: 200px;">
                         {{ $student->addresses->address_id }},
                         {{ $student->addresses->street_1 }},
@@ -46,15 +71,18 @@
                         {{ $student->addresses->state }},
                         {{ $student->addresses->country }}
                     </td>
-                    <td>{{ $student->colleges->college_name }}</td>
-                    <td>{{ $student->departments->dept_name }}</td>
+                    <td style="width: 150px;">{{ $student->colleges->college_name }}</td>
+                    <td style="width: 100px;">{{ $student->departments->dept_name }}</td>
+                    <td style="width: 80px;">
+                        <span style="color: green;margin-left: 20px;" id="edit" onclick="editStudent('<?php echo $student->student_id ?>')"><i class="fa-solid fa-pen-to-square"></i></span>
+                        <span style="color: red;margin-left: 10px;" id="delete" onclick="deleteStudent('<?php echo $student->student_id ?>')"><i class="fa-solid fa-trash"></i></span>
+                    </td>
                 </tr>
                 @endforeach
             </tbody>
             </thead>
             <tbody></tbody>
         </table>
-        <a href="{{ route('students.form', ['id'=>$college->college_id]) }}">add new student</a>
         <div id="warnings" style="margin-left: 10px;">
             @if(session()->has('message'))
             <span style="color: green;" class="warning">{{ session()->get('message') }}</span>
@@ -62,46 +90,39 @@
             <p style="color: red;" class="warning"></p>
         </div>
     </div>
+    <script src="https://kit.fontawesome.com/52bd1c8b9d.js" crossorigin="anonymous"></script>
     <script>
-        let del = document.getElementById("btn1");
-        del.addEventListener("click", () => {
-            var cval = [];
-            let cb = document.querySelectorAll('input[class="cb"]:checked');
-            for (i = 0; i < cb.length; i++) {
-                cval.push(cb[i].value);
-            }
-            if (cb.length > 0) {
-                var jsondata = JSON.stringify(cval);
-                var encodedata = encodeURIComponent(jsondata);
-                window.location.href = "{{ route('delete.students') }}?data=" + encodedata;
-                document.querySelector("p").textContent = "";
-            } else {
-                document.querySelector("p").textContent = "please select a detail";
-            }
-        }, false);
-
-        function toggleCheckboxes(main) {
-            var checkboxes = document.querySelectorAll('input[class="cb"]');
-            checkboxes.forEach(function(checkbox) {
-                checkbox.checked = main.checked;
-            });
+        function deleteStudent(id) {
+            var jsondata = JSON.stringify(id);
+            var encodedata = encodeURIComponent(jsondata);
+            window.location.href = "{{ route('delete.students') }}?data=" + encodedata;
         }
-        let edit = document.getElementById("btn2");
-        edit.addEventListener("click", () => {
-            var cval1;
-            let cb = document.querySelectorAll('input[class="cb"]:checked');
-            if (cb.length == 1) {
-                cval1 = cb[0].value;
-                document.querySelector("p").textContent = "";
-                var jsondata = JSON.stringify(cval1);
-                var encodedata = encodeURIComponent(jsondata);
-                window.location.href = "{{ route('edit.student') }}?data=" + encodedata;
-            } else if (cb.length == 0) {
-                document.querySelector("p").textContent = "please select a detail";
-            } else {
-                document.querySelector("p").textContent = "please select one detail at a time";
+
+        function editStudent(id) {
+            var jsondata = JSON.stringify(id);
+            var encodedata = encodeURIComponent(jsondata);
+            window.location.href = "{{ route('edit.student') }}?data=" + encodedata;
+        }
+
+        function searchData() {
+            let input, filter, table, tr, td, i, txtValue;
+            input = document.getElementById("search");
+            filter = input.value.toUpperCase();
+            table = document.getElementById("dataTable");
+            tr = table.getElementsByTagName("tr");
+
+            for (i = 0; i < tr.length; i++) {
+                td = tr[i].getElementsByTagName("td")[1];
+                if (td) {
+                    txtValue = td.textContent || td.innerText;
+                    if (txtValue.toUpperCase().indexOf(filter) > -1) {
+                        tr[i].style.display = "";
+                    } else {
+                        tr[i].style.display = "none";
+                    }
+                }
             }
-        }, false);
+        }
 
         window.onload = function() {
             var warnings = document.getElementsByClassName("warning");
