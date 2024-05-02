@@ -12,10 +12,14 @@ use Illuminate\Support\Facades\DB;
 
 class CollegesController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
-        $colleges = CollegesModel::all();
-        return view('index', ["colleges" => $colleges]);
+        // $colleges = CollegesModel::all();
+        // return view('index', ["colleges" => $colleges]);
+
+        $perPage = $request->input('rowsPerPage', 5);
+        $colleges = CollegesModel::paginate($perPage);
+        return view('index', compact('colleges'));
     }
     public function store(Request $request)
     {

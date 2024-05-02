@@ -6,45 +6,19 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{{ $college->college_name }} Staff's</title>
     <link rel="stylesheet" href="{{ asset('css/style1.css') }}" />
-    <style>
-        a {
-            text-decoration: none;
-            color: white;
-            font-size: 17px;
-        }
-
-        #add-btn {
-            background-color: blue;
-            height: 27px;
-            width: 120px;
-            border-radius: 5px;
-            border-style: none;
-            transition: 200ms;
-        }
-
-        #add-btn:hover {
-            transform: scale(1.02);
-            background-color: rgb(0, 0, 230);
-        }
-
-        #search {
-            margin-left: 1010px;
-            height: 23px;
-        }
-    </style>
 </head>
 
 <body>
     <div id="mydiv" style="margin-left: 3px;">
         <h1>Staff's of {{ $college->college_name }} </h1>
-        <input type="text" id="search" onkeyup="searchData()" placeholder="Search">
+        <input type="text" id="search" onkeyup="searchData()" placeholder="Search" style="margin-left: 940px;">
         <button id="add-btn"><a href="{{ route('staffs.form', ['id'=>$college->college_id]) }}">add staff</a></button><br><br>
         <table id="dataTable">
             <thead>
                 <tr>
                     <th>No.</th>
+                    <th style="width: 150px;" onclick="shuffle(1)">Staff Name</th>
                     <th style="width: 100px;">Staff ID</th>
-                    <th style="width: 150px;">Staff Name</th>
                     <th style="width: 80px;">Staff Gender</th>
                     <th style="width: 80px;">Staff DOB</th>
                     <th style="width: 150px;">Staff Mobile no.</th>
@@ -58,8 +32,8 @@
                 @foreach($staffs as $staff)
                 <tr>
                     <td><?php echo $a++; ?></td>
-                    <td style="width: 100px;">{{ $staff->staff_id }}</td>
                     <td style="width: 150px;">{{ $staff->staff_name }}</td>
+                    <td style="width: 100px;">{{ $staff->staff_id }}</td>
                     <td style="width: 80px;">{{ $staff->staff_gender }}</td>
                     <td style="width: 80px;">{{ \Carbon\Carbon::parse($staff->staff_dob)->age }}</td>
                     <td style="width: 150px;">{{ $staff->mobile_no }}</td>
@@ -90,6 +64,8 @@
         </div>
     </div>
     <script src="https://kit.fontawesome.com/52bd1c8b9d.js" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+    <script src="{{ asset('js/script.js') }}"></script>
     <script>
         function deleteStaff(id) {
             var jsondata = JSON.stringify(id);
@@ -101,37 +77,6 @@
             var jsondata = JSON.stringify(id);
             var encodedata = encodeURIComponent(jsondata);
             window.location.href = "{{ route('edit.staff') }}?data=" + encodedata;
-        }
-
-        function searchData() {
-            let input, filter, table, tr, td, i, txtValue;
-            input = document.getElementById("search");
-            filter = input.value.toUpperCase();
-            table = document.getElementById("dataTable");
-            tr = table.getElementsByTagName("tr");
-
-            for (i = 0; i < tr.length; i++) {
-                td = tr[i].getElementsByTagName("td")[1];
-                if (td) {
-                    txtValue = td.textContent || td.innerText;
-                    if (txtValue.toUpperCase().indexOf(filter) > -1) {
-                        tr[i].style.display = "";
-                    } else {
-                        tr[i].style.display = "none";
-                    }
-                }
-            }
-        }
-
-        window.onload = function() {
-            var warnings = document.getElementsByClassName("warning");
-            if (warnings) {
-                setTimeout(() => {
-                    for (i = 0; i < warnings.length; i++) {
-                        warnings[i].textContent = "";
-                    }
-                }, 3000);
-            }
         }
     </script>
 </body>

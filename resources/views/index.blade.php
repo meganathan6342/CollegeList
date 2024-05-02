@@ -2,65 +2,36 @@
 <html lang="en">
 
 <head>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@3.3.7/dist/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+
+    <!-- Optional theme -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@3.3.7/dist/css/bootstrap-theme.min.css" integrity="sha384-rHyoN1iRsVXV4nD0JutlnGaslCJuC7uwjduW9SVrLvRYooPp2bWYgmgJQIXwl/Sp" crossorigin="anonymous">
+
+    <!-- Latest compiled and minified JavaScript -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@3.3.7/dist/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>College Home Page</title>
     <link rel="stylesheet" href="{{ asset('css/style1.css') }}" />
-    <style>
-        a {
-            text-decoration: none;
-            color: white;
-            font-size: 17px;
-        }
-
-        #add-btn {
-            background-color: blue;
-            height: 27px;
-            width: 120px;
-            border-radius: 5px;
-            border-style: none;
-            transition: 200ms;
-        }
-
-        #add-btn:hover {
-            transform: scale(1.02);
-            background-color: rgb(0, 0, 230);
-        }
-
-        #search {
-            margin-left: 330px;
-            height: 23px;
-        }
-
-        .college-details {
-            position: absolute;
-            left: 400px;
-            border-style: none;
-            background-color: rgb(200, 200, 200);
-            padding: 0px 5px;
-            min-width: 200px;
-            border-radius: 5px;
-            visibility: hidden;
-        }
-    </style>
 </head>
 
 <body>
     <div id="home">
         <div id="mydiv">
             <h1>Welcome to Home page</h1>
-            <select name="" id="">
-                <option value="10">5</option>
-                <option value="20">10</option>
-                <option value="15">15</option>
-            </select> <span style="font-size: 16px;">entries per page</span>
+            <select id="rowsPerPage" onchange="changePerPage()">
+                <option value="5" {{ $colleges->perPage() == 5 ? 'selected' : '' }}>5</option>
+                <option value="10" {{ $colleges->perPage() == 10 ? 'selected' : '' }}>10</option>
+                <option value="20" {{ $colleges->perPage() == 20 ? 'selected' : '' }}>20</option>
+            </select>
+            <span style="font-size: 16px;">entries per page</span>
             <input type="text" id="search" onkeyup="searchData()" placeholder="Search">
             <button id="add-btn"><a href="{{ route('colleges') }}">add college</a></button><br><br>
             <table id="dataTable">
                 <thead>
                     <tr>
                         <th>No.</th>
-                        <th style="width: 300px;">College</th>
+                        <th style="width: 300px;" onclick="shuffle(1)">College</th>
                         <th>Address</th>
                         <th>Action</th>
                     </tr>
@@ -95,6 +66,10 @@
                     @endforeach
                 </tbody>
             </table>
+            <div id="footer">
+                <span>Showing 1 to {{ count($colleges) }} of {{ $colleges->total() }}</span>
+                <p id="pg-links">{{ $colleges->appends(['rowsPerPage' => $colleges->perPage()])->links() }} </p>
+            </div>
         </div>
         <div id="warnings">
             @if(session()->has('message'))
@@ -103,7 +78,9 @@
             <p style="color: red;" class="warning"></p>
         </div>
     </div>
+
     <script src="https://kit.fontawesome.com/52bd1c8b9d.js" crossorigin="anonymous"></script>
+    <script src="{{ asset('js/script.js') }}"></script>
     <script>
         function deleteCollege(id) {
             var jsondata = JSON.stringify(id);
@@ -117,52 +94,10 @@
             window.location.href = "{{ route('edit.college') }}?data=" + encodedata;
         }
 
-        let isVisible = false;
-
-        function collegeDetails(collegeId) {
-            let collegeDetails = document.querySelectorAll('.college-details');
-            collegeDetails.forEach(function(cd) {
-                if (cd.getAttribute('data-college-id') === collegeId) {
-                    if (!isVisible) {
-                        cd.style.visibility = 'visible';
-                        isVisible = true;
-                    } else {
-                        cd.style.visibility = 'hidden';
-                        isVisible = false;
-                    }
-                }
-            });
-        }
-
-        function searchData() {
-            let input, filter, table, tr, td, i, txtValue;
-            input = document.getElementById("search");
-            filter = input.value.toUpperCase();
-            table = document.getElementById("dataTable");
-            tr = table.getElementsByTagName("tr");
-
-            for (i = 0; i < tr.length; i++) {
-                td = tr[i].getElementsByTagName("td")[1];
-                if (td) {
-                    txtValue = td.textContent || td.innerText;
-                    if (txtValue.toUpperCase().indexOf(filter) > -1) {
-                        tr[i].style.display = "";
-                    } else {
-                        tr[i].style.display = "none";
-                    }
-                }
-            }
-        }
-
-        window.onload = function() {
-            var warnings = document.getElementsByClassName("warning");
-            if (warnings) {
-                setTimeout(() => {
-                    for (i = 0; i < warnings.length; i++) {
-                        warnings[i].textContent = "";
-                    }
-                }, 3000);
-            }
+        function changePerPage() {
+            var perPage = document.getElementById('rowsPerPage').value;
+            var url = "{{ route('index') }}" + "?rowsPerPage=" + perPage;
+            window.location.href = url;
         }
     </script>
 </body>

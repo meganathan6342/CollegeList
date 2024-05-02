@@ -22,7 +22,7 @@ use Illuminate\Support\Facades\Route;
 // });
 
 //college
-Route::get('/', CollegesController::class.'@index');
+Route::get('/', CollegesController::class.'@index')->name('index');
 Route::get('/college-form', function() { return view('CollegesForm'); })->name('colleges');
 Route::post('/submit-college', CollegesController::class.'@store');
 Route::get('/home', CollegesController::class.'@index')->name('home.colleges');

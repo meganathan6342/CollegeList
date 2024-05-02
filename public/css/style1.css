@@ -3,12 +3,12 @@
     font-size: 14px;
 }
 
-#mydiv{
+#mydiv {
     position: relative;
     margin-left: 200px;
 }
 
-#warnings{
+#warnings {
     position: relative;
     margin-left: 200px;
     padding-top: 20px;
@@ -28,12 +28,12 @@ table {
     border-collapse: collapse;
 }
 
-th{
+th {
     border: 1px solid rgb(80, 79, 79);
     padding: 5px 10px;
 }
 
-td{
+td {
     border-bottom: 1px solid rgb(145, 144, 144);
     padding: 5px 10px;
 }
@@ -41,12 +41,15 @@ td{
 tr>th:nth-child(3) {
     width: 250px;
 }
+
 tr>th:nth-child(4) {
     width: 150px;
 }
+
 tr>th:nth-child(5) {
     width: 100px;
 }
+
 tr>th:nth-child(6) {
     width: 100px;
 }
@@ -54,23 +57,75 @@ tr>th:nth-child(6) {
 tr>td:nth-child(3) {
     width: 250px;
 }
+
 tr>td:nth-child(4) {
     width: 150px;
 }
+
 tr>td:nth-child(5) {
     width: 100px;
 }
+
 tr>td:last-child {
     width: 100px;
 }
 
-tr > td:nth-child(even){
+tr>td:nth-child(even) {
     background-color: rgb(235, 244, 244);
 }
-tbody > tr:nth-child(odd){
+
+tbody>tr:nth-child(odd) {
     background-color: rgb(244, 244, 244);
 }
 
 #btn1 {
     margin-left: 10px;
+}
+
+#footer {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 20px;
+    font-size: 18px;
+    align-items: center;
+}
+
+#pg-links {
+    margin-right: -200px;
+}
+
+a {
+    text-decoration: none;
+    color: white;
+    font-size: 17px;
+}
+
+#add-btn {
+    background-color: blue;
+    height: 27px;
+    width: 120px;
+    border-radius: 5px;
+    border-style: none;
+    transition: 200ms;
+}
+
+#add-btn:hover {
+    transform: scale(1.02);
+    background-color: rgb(0, 0, 230);
+}
+
+#search {
+    margin-left: 240px;
+    height: 23px;
+}
+
+.college-details {
+    position: absolute;
+    left: 400px;
+    border-style: none;
+    background-color: rgb(200, 200, 200);
+    padding: 0px 5px;
+    min-width: 200px;
+    border-radius: 5px;
+    visibility: hidden;
 }
