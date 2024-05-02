@@ -39,4 +39,17 @@ class DepartmentsModel extends Model
         }
         return $key;
     }
+
+    protected static function boot()
+    {
+        parent::boot();
+
+        static::deleting(function ($department) {
+            $department->staffs()->delete();
+        });
+
+        static::deleting(function ($department) {
+            $department->students()->delete();
+        });
+    }
 }

@@ -84,12 +84,6 @@ class StaffsController extends Controller
     {
         $id = json_decode(urldecode($request->input('data')), true);
 
-        $address_id = DB::select('select address_id from staffs where staff_id = ?', [$id]);
-        $aid = $address_id[0]->address_id;
-        $address = AddressesModel::find($aid);
-        if (!empty($address)) {
-            $address->delete();
-        }
         $staff = StaffsModel::find($id);
         if(!empty($staff)) {
             $staff->delete();

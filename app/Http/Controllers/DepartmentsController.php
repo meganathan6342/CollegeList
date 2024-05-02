@@ -61,17 +61,11 @@ class DepartmentsController extends Controller
     {
         $id = json_decode(urldecode($request->input('data')), true);
 
-        $students = StudentsModel::where('dept_short_code', $id)->get();
-        foreach ($students as $student) {
-            $student->delete();
-        }
-        $staffs = StaffsModel::where('dept_short_code', $id)->get();
-        foreach ($staffs as $staff) {
-            $staff->delete();
-        }
         $department = DepartmentsModel::find($id);
-        $department->delete();
-        
+        if (!empty($department)) {
+            $department->delete();
+        }
+
         return redirect()->back()->with('success', 'deleted college details suceessfully!');
     }
 }

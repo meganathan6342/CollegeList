@@ -48,8 +48,8 @@
                     <td style="width: 150px;">{{ $student->colleges->college_name }}</td>
                     <td style="width: 100px;">{{ $student->departments->dept_name }}</td>
                     <td style="width: 80px;">
-                        <span style="color: green;margin-left: 20px;" id="edit" onclick="editStudent('<?php echo $student->student_id ?>')"><i class="fa-solid fa-pen-to-square"></i></span>
-                        <span style="color: red;margin-left: 10px;" id="delete" onclick="deleteStudent('<?php echo $student->student_id ?>')"><i class="fa-solid fa-trash"></i></span>
+                        <span title="edit" style="color: green;margin-left: 20px;" id="edit" onclick="editStudent('<?php echo $student->student_id ?>')"><i class="fa-solid fa-pen-to-square"></i></span>
+                        <span title="delete" style="color: red;margin-left: 10px;" id="delete" onclick="deleteStudent('<?php echo $student->student_id ?>')"><i class="fa-solid fa-trash"></i></span>
                     </td>
                 </tr>
                 @endforeach

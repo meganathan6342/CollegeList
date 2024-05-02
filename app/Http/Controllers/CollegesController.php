@@ -72,26 +72,6 @@ class CollegesController extends Controller
     {
         $id = json_decode(urldecode($request->input('data')), true);
 
-        $students = StudentsModel::where('college_id', $id)->get();
-        foreach ($students as $student) {
-            $student->delete();
-        }
-
-        $staffs = StaffsModel::where('college_id', $id)->get();
-        foreach ($staffs as $staff) {
-            $staff->delete();
-        }
-
-        $departments = DepartmentsModel::where('college_id', $id)->get();
-        foreach ($departments as $department) {
-            $department->delete();
-        }
-        $address_id = DB::select('select address_id from colleges where college_id = ?', [$id]);
-        $aid = $address_id[0]->address_id;
-        $address = AddressesModel::find($aid);
-        if (!empty($address)) {
-            $address->delete();
-        }
         $college = CollegesModel::find($id);
         if (!empty($college)) {
             $college->delete();

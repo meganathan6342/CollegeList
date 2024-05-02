@@ -51,9 +51,9 @@
                             {{ $college->addresses->country }}
                         </td>
                         <td>
-                            <span style="color: blue;margin-left: 40px;" onclick="collegeDetails('<?php echo $college->college_id ?>')"><i class="fa-regular fa-file-lines"></i></span>
-                            <span style="color: green;margin-left: 10px;" id="edit" onclick="editCollege('<?php echo $college->college_id ?>')"><i class="fa-solid fa-pen-to-square"></i></span>
-                            <span style="color: red;margin-left: 10px;" id="delete" onclick="deleteCollege('<?php echo $college->college_id ?>')"><i class="fa-solid fa-trash"></i></span>
+                            <span title="details" style="color: blue;margin-left: 40px;" onclick="collegeDetails('<?php echo $college->college_id ?>')"><i class="fa-regular fa-file-lines"></i></span>
+                            <span title="edit" style="color: green;margin-left: 10px;" id="edit" onclick="editCollege('<?php echo $college->college_id ?>')"><i class="fa-solid fa-pen-to-square"></i></span>
+                            <span title="delete" style="color: red;margin-left: 10px;" id="delete" onclick="deleteCollege('<?php echo $college->college_id ?>')"><i class="fa-solid fa-trash"></i></span>
                         </td>
                         <td class="college-details" data-college-id="{{ $college->college_id }}">
                             <ul>

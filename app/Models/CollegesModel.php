@@ -31,4 +31,25 @@ class CollegesModel extends Model
     {
         return $this->hasMany(StudentsModel::class, 'college_id')->where('college_id');
     }
+
+    protected static function boot()
+    {
+        parent::boot();
+
+        static::deleting(function ($college) {
+            $college->addresses()->delete();
+        });
+
+        static::deleting(function ($college) {
+            $college->departments()->delete();
+        });
+
+        static::deleting(function ($college) {
+            $college->staffs()->delete();
+        });
+
+        static::deleting(function ($college) {
+            $college->students()->delete();
+        });
+    }
 }

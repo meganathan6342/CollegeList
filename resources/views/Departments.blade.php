@@ -33,8 +33,8 @@
                     <td>{{ $department->dept_id }}</td>
                     <td style="width: 200px;">{{ $department->colleges->college_name }}</td>
                     <td>
-                        <span style="color: green;margin-left: 30px;" id="edit" onclick="editDept('<?php echo $department->dept_short_code ?>')"><i class="fa-solid fa-pen-to-square"></i></span>
-                        <span style="color: red;margin-left: 10px;" id="delete" onclick="deleteDept('<?php echo $department->dept_short_code ?>')"><i class="fa-solid fa-trash"></i></span>
+                        <span title="edit" style="color: green;margin-left: 30px;" id="edit" onclick="editDept('<?php echo $department->dept_short_code ?>')"><i class="fa-solid fa-pen-to-square"></i></span>
+                        <span title="delete" style="color: red;margin-left: 10px;" id="delete" onclick="deleteDept('<?php echo $department->dept_short_code ?>')"><i class="fa-solid fa-trash"></i></span>
                     </td>
                 </tr>
                 @endforeach

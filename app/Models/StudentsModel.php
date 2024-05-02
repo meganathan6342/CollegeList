@@ -29,4 +29,13 @@ class StudentsModel extends Model
     {
         return $this->belongsTo(DepartmentsModel::class, 'dept_short_code');
     }
+
+    protected static function boot()
+    {
+        parent::boot();
+
+        static::deleting(function ($student) {
+            $student->addresses()->delete();
+        });
+    }
 }

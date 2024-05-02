@@ -100,17 +100,11 @@ class StudentsController extends Controller
     {
         $id = json_decode(urldecode($request->input('data')), true);
 
-            $address_id = DB::select('select address_id from students where student_id = ?', [$id]);
-            $aid = $address_id[0]->address_id;
-            $address = AddressesModel::find($aid);
-            if (!empty($address)) {
-                $address->delete();
-            }
-            $student = StudentsModel::find($id);
-            if (!empty($student)) {
-                $student->delete();
-            }
-        
+        $student = StudentsModel::find($id);
+        if (!empty($student)) {
+            $student->delete();
+        }
+
         return redirect()->back()->with('success', 'deleted student details suceessfully!');
     }
     public function updateStdForm(Request $request)
