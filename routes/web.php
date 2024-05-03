@@ -33,7 +33,7 @@ Route::put('/update-college/{id}', CollegesController::class.'@updateCollege')->
 //depts
 Route::get('/dept-details/{id}', DepartmentsController::class.'@index')->name('dept.details');
 Route::get('/dept-form/{id}', DepartmentsController::class.'@deptForm')->name('dept.form');
-Route::post('dept-form/submit-dept', DepartmentsController::class.'@store');
+Route::post('dept-form/submit-dept', DepartmentsController::class.'@store')->name('submit.dept');
 Route::get('/delete-depts', DepartmentsController::class.'@deleteDepartments')->name('delete.depts');
 Route::get('/edit-dept', DepartmentsController::class.'@updateDeptForm')->name('edit.dept');
 Route::put('/update-dept/{id}', DepartmentsController::class.'@updateDepartment')->name('editing.dept');
@@ -41,7 +41,7 @@ Route::put('/update-dept/{id}', DepartmentsController::class.'@updateDepartment'
 //staff
 Route::get('/staffs-details/{id}', StaffsController::class.'@index')->name('staffs.details');
 Route::get('/staffs-form/{id}', StaffsController::class.'@staffsForm')->name('staffs.form');
-Route::post('staffs-form/submit-staff', StaffsController::class.'@store');
+Route::post('/submit-staff', StaffsController::class.'@store')->name('submit.staff');
 Route::get('/delete-staffs', StaffsController::class.'@deleteStaffs')->name('delete.staffs');
 Route::get('/edit-staff', StaffsController::class.'@updateStfForm')->name('edit.staff');
 Route::put('/update-staff/{id}', StaffsController::class.'@updateStaff')->name('editing.staff');

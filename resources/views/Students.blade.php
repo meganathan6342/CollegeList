@@ -29,7 +29,7 @@
                 </tr>
             <tbody>
                 <?php $a = 1; ?>
-                @foreach($students as $student)
+                @forelse($students as $student)
                 <tr>
                     <td><?php echo $a++; ?></td>
                     <td style="width: 150px;">{{ $student->student_name }}</td>
@@ -52,7 +52,11 @@
                         <span title="delete" style="color: red;margin-left: 10px;" id="delete" onclick="deleteStudent('<?php echo $student->student_id ?>')"><i class="fa-solid fa-trash"></i></span>
                     </td>
                 </tr>
-                @endforeach
+                @empty
+                <tr style="background-color: white;">
+                    <td colspan="5" style="border-style: none; color: red;">No students are here..</td>
+                </tr>
+                @endforelse
             </tbody>
             </thead>
             <tbody></tbody>
@@ -79,7 +83,6 @@
             var encodedata = encodeURIComponent(jsondata);
             window.location.href = "{{ route('edit.student') }}?data=" + encodedata;
         }
-
     </script>
 </body>
 

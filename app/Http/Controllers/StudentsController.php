@@ -7,20 +7,21 @@ use App\Models\CollegesModel;
 use App\Models\DepartmentsModel;
 use App\Models\StudentsModel;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\DB;
 
 class StudentsController extends Controller
 {
     public function studentsForm($id)
     {
+        $college = CollegesModel::find($id);
         $departments = DepartmentsModel::where('college_id', $id)->get();
-        return view('StudentsForm', ["id" => $id, "departments" => $departments]);
+        return view('StudentsForm', ["college" => $college, "departments" => $departments]);
     }
     public function index($id)
     {
         $college = CollegesModel::find($id);
+        $departments = DepartmentsModel::where('college_id', $id)->get();
         $students = StudentsModel::where('college_id', $id)->get();
-        return view('Students', ["college" => $college, "students" => $students]);
+        return view('Students', ["college" => $college, "departments" => $departments, "students" => $students]);
     }
     public function store(Request $request)
     {
@@ -46,7 +47,7 @@ class StudentsController extends Controller
             $content = file_get_contents(storage_path('app/texts/generateValueForStudents.txt'));
 
             $student = new StudentsModel();
-            $student->student_id = $cid . ($request->input('dept_short_code') . $content);
+            $student->student_id = ($request->input('dept_short_code') . '_' . 'STD' . '_' . $content);
             $student->student_name = $request->input('student_name');
             $student->student_gender = $request->input('student_gender');
             $student->student_dob = $request->input('student_dob');

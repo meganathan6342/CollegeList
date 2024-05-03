@@ -63,7 +63,14 @@
                         </tr>
                         <tr>
                             <td>Student dept short code : </td>
-                            <td><input type="text" name="dept_short_code" value="{{ $student->dept_short_code }}" required></td>
+                            <td>
+                                <select name="dept_short_code">
+                                    <option value="{{$student->dept_short_code}}" style="background-color: rgb(200, 200, 200); border: 1px solid green;">{{ $student->departments->dept_name }}</option>
+                                    @foreach($departments as $department)
+                                    <option value="{{$department->dept_short_code}}">{{ $department->dept_name }}</option>
+                                    @endforeach
+                                </select>
+                            </td>
                         </tr>
                         <tr>
                             <td colspan="2" style="text-align: right; padding-right: 100px;"><input type="submit" value="Update" class="submit"></td>
@@ -77,7 +84,7 @@
                 <table>
                     <tbody>
                         <tr>
-                            <td><input type="tel" name="college_id" value="{{ $id }}" style="visibility: hidden;"></td>
+                            <td><input type="tel" name="college_id" value="{{ $college->college_id }}" style="visibility: hidden;"></td>
                         </tr>
                         <tr>
                             <td>Student Name : </td>
@@ -117,7 +124,13 @@
                         </tr>
                         <tr>
                             <td>Student dept short code : </td>
-                            <td><input type="text" name="dept_short_code" required></td>
+                            <td>
+                                <select name="dept_short_code" id="dsc" required>
+                                    @foreach($departments as $department)
+                                    <option value="{{$department->dept_short_code}}">{{ $department->dept_name }}</option>
+                                    @endforeach
+                                </select>
+                            </td>
                         </tr>
                         <tr>
                             <td colspan="2" style="text-align: right; padding-right: 100px;"><input type="submit" value="Submit" class="submit"></td>
@@ -130,35 +143,11 @@
             <p style="color: red;">{{ session()->get('message') }}</p>
             @endif
         </div>
-        <div id="depts">
-            <div id="depts">
-                <h3>Our Departments</h3>
-                @if(isset($departments))
-                <table>
-                    <thead>
-                        <tr>
-                            <th>No.</th>
-                            <th>Dept Name</th>
-                            <th>Dept Short Code</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <?php $b = 1 ?>
-                        @foreach($departments as $department)
-                        <tr>
-                            <td><?php echo $b++ . '.'; ?></td>
-                            <td>{{ $department->dept_name }}</td>
-                            <td>{{ $department->dept_short_code }}</td>
-                        </tr>
-                        @endforeach
-                    </tbody>
-                </table>
-                @else
-                <span>please first add a department</span>
-                @endif
-            </div>
-        </div>
     </div>
+    <script>
+        let dsc = document.getElementById("dsc").value;
+        console.log(dsc);
+    </script>
 </body>
 
 </html>

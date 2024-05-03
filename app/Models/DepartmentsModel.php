@@ -30,26 +30,22 @@ class DepartmentsModel extends Model
         return $this->hasMany(StudentsModel::class, 'dept_short_code');
     }
 
-    protected static function generateUniqueKey()
-    {
-        $key = substr(str_shuffle('ABCDEFGHIJKLMNOPQRSTUVWXYZ'), 0, 4);
-
-        while (static::where('dept_short_code', $key)->exists()) {
-            $key = substr(str_shuffle('ABCDEFGHIJKLMNOPQRSTUVWXYZ'), 0, 4);
-        }
-        return $key;
-    }
-
     protected static function boot()
     {
         parent::boot();
 
         static::deleting(function ($department) {
-            $department->staffs()->delete();
+            $department->staffs()->each(function ($staff) {
+                $staff->addresses->delete();
+                $staff->delete();
+            });
         });
 
         static::deleting(function ($department) {
-            $department->students()->delete();
+            $department->students()->each(function ($student) {
+                $student->addresses->delete();
+                $student->delete();
+            });
         });
     }
 }

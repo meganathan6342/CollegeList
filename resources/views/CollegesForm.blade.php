@@ -93,6 +93,7 @@
         </form>
         @endif
     </div>
+    <script src="{{ asset('js/script1.js') }}"></script>
 </body>
 
 </html>

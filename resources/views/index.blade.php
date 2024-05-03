@@ -38,7 +38,7 @@
                 </thead>
                 <tbody>
                     <?php $a = 1; ?>
-                    @foreach($colleges as $college)
+                    @forelse($colleges as $college)
                     <tr>
                         <td><?php echo $a++ . '.'; ?></td>
                         <td style="width: 300px;">{{ $college->college_name }}</td>
@@ -63,7 +63,11 @@
                             </ul>
                         </td>
                     </tr>
-                    @endforeach
+                    @empty
+                    <tr style="background-color: white;">
+                        <td colspan="5" style="border-style: none; color: red;">No colleges are here..</td>
+                    </tr>
+                    @endforelse
                 </tbody>
             </table>
             <div id="footer">
@@ -80,6 +84,8 @@
     </div>
 
     <script src="https://kit.fontawesome.com/52bd1c8b9d.js" crossorigin="anonymous"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src=" https://cdn.jsdelivr.net/npm/bootstrap@3.3.7/dist/js/bootstrap.min.js"></script>
     <script src="{{ asset('js/script.js') }}"></script>
     <script>
         function deleteCollege(id) {

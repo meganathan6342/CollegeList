@@ -18,7 +18,8 @@ class DepartmentsController extends Controller
     {
         $college = CollegesModel::find($id);
         $departments = DepartmentsModel::where('college_id', $id)->get();
-        return view('Departments', ["college" => $college, "departments" => $departments]);
+        $editing = session()->has('editing_dept');
+        return view('Departments', ["college" => $college, "departments" => $departments, "editing" => $editing]);
     }
     public function store(Request $request)
     {
@@ -27,13 +28,41 @@ class DepartmentsController extends Controller
         $exist = DepartmentsModel::where('college_id', $cid)->where('dept_name', $dept_name)->exists();
         if (!$exist) {
 
-            $uniqueKey = DepartmentsModel::generateUniqueKey();
+            $college = CollegesModel::find($request->input('college_id'));
+            $college_name = $college->college_name;
+            $cwords = explode(" ", $college_name);
+            $clg_short_code = null;
+            if(count($cwords) > 1) {
+                foreach($cwords as $word) {
+                    $clg_short_code .= $word[0];
+                }
+            }
+            else {
+                $clg_short_code = $college_name[0] . $college_name[1] . $college_name[2];
+            }
+            $clg_short_code = strtoupper($clg_short_code);
+
+            $dept_name = $request->input('dept_name');
+            $dwords = explode(" ", $dept_name);
+            $dept_code = null;
+            echo count($dwords);
+            if(count($dwords) > 1) {
+                foreach($dwords as $word) {
+                    $dept_code .= $word[0];
+                }
+            }
+            else {
+                $dept_code = $dept_name[0] . $dept_name[1] . $dept_name[2];
+            }
+            $dept_code = strtoupper($dept_code);
+
+            $dept_short_code = $clg_short_code . '_' . $dept_code;
 
             $dept = new DepartmentsModel();
-            $dept->dept_short_code = $uniqueKey;
+            $dept->dept_short_code = $dept_short_code;
             $cid = $request->input('college_id');
             $dept->dept_name = $request->input('dept_name');
-            $dept->dept_id = $cid . (string)($uniqueKey);
+            $dept->dept_id = $cid . $dept_short_code;
             $dept->college_id = $cid;
             $dept->save();
             return redirect()->back()->with('message', 'dept stored succussfully!');

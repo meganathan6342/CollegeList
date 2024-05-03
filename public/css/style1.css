@@ -14,67 +14,72 @@
     padding-top: 20px;
 }
 
-table a {
+#mydiv table a {
     color: rgb(46, 55, 180);
     text-decoration: none;
 }
 
-table a:hover {
+#mydiv table a:hover {
     color: rgb(129, 137, 247);
     text-decoration: none;
 }
 
-table {
+#mydiv table a:visited {
+    color: rgb(46, 55, 180);
+    text-decoration: none;
+}
+
+#mydiv table {
     border-collapse: collapse;
 }
 
-th {
+#mydiv th {
     border: 1px solid rgb(80, 79, 79);
     padding: 5px 10px;
 }
 
-td {
+#mydiv td {
     border-bottom: 1px solid rgb(145, 144, 144);
     padding: 5px 10px;
 }
 
-tr>th:nth-child(3) {
+#mydiv tr>th:nth-child(3) {
     width: 250px;
 }
 
-tr>th:nth-child(4) {
+#mydiv tr>th:nth-child(4) {
     width: 150px;
 }
 
-tr>th:nth-child(5) {
+#mydiv tr>th:nth-child(5) {
     width: 100px;
 }
 
-tr>th:nth-child(6) {
+#mydiv tr>th:nth-child(6) {
     width: 100px;
 }
 
-tr>td:nth-child(3) {
+#mydiv tr>td:nth-child(3) {
     width: 250px;
 }
 
-tr>td:nth-child(4) {
+#mydiv tr>td:nth-child(4) {
     width: 150px;
 }
 
-tr>td:nth-child(5) {
+#mydiv tr>td:nth-child(5) {
     width: 100px;
 }
 
-tr>td:last-child {
+#mydiv tr>td:last-child {
     width: 100px;
 }
 
-tr>td:nth-child(even) {
+#mydiv tr>td:nth-child(even) {
     background-color: rgb(235, 244, 244);
 }
 
-tbody>tr:nth-child(odd) {
+#mydiv tbody>tr:nth-child(odd) {
     background-color: rgb(244, 244, 244);
 }
 
@@ -95,6 +100,11 @@ tbody>tr:nth-child(odd) {
 }
 
 a {
+    text-decoration: none;
+    color: white;
+    font-size: 17px;
+}
+a:hover {
     text-decoration: none;
     color: white;
     font-size: 17px;

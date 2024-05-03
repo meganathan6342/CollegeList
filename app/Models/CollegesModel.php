@@ -45,11 +45,17 @@ class CollegesModel extends Model
         });
 
         static::deleting(function ($college) {
-            $college->staffs()->delete();
+            $college->staffs()->each(function ($staff) {
+                $staff->addresses->delete();
+                $staff->delete();
+            });
         });
 
         static::deleting(function ($college) {
-            $college->students()->delete();
+            $college->students()->each(function ($student) {
+                $student->addresses->delete();
+                $student->delete();
+            });
         });
     }
 }

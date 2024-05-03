@@ -13,14 +13,17 @@ class StaffsController extends Controller
 {
     public function staffsForm($id)
     {
+        $college = CollegesModel::find($id);
         $departments = DepartmentsModel::where('college_id', $id)->get();
-        return view('StaffsForm', ["id" => $id, 'departments' => $departments]);
+        $staffs = StaffsModel::where('college_id', $id)->get();
+        return view('Staffs', ["college" => $college, "departments" => $departments, "staffs" => $staffs]);
     }
     public function index($id)
     {
         $college = CollegesModel::find($id);
+        $departments = DepartmentsModel::where('college_id', $id)->get();
         $staffs = StaffsModel::where('college_id', $id)->get();
-        return view('Staffs', ["college" => $college, "staffs" => $staffs]);
+        return view('Staffs', ["college" => $college, "departments" => $departments, "staffs" => $staffs]);
     }
     public function store(Request $request)
     {
@@ -38,7 +41,7 @@ class StaffsController extends Controller
             $content = file_get_contents(storage_path('app/texts/generateValueForStaffs.txt'));
 
             $staff = new StaffsModel();
-            $staff->staff_id = $cid . ($request->input('dept_short_code') . $content);
+            $staff->staff_id = ($request->input('dept_short_code') . '_' . 'STAFF' . '_' . $content);
             $staff->staff_name = $request->input('staff_name');
             $staff->staff_gender = $request->input('staff_gender');
             $staff->staff_dob = $request->input('staff_dob');
@@ -95,7 +98,9 @@ class StaffsController extends Controller
     {
         $id = json_decode(urldecode($request->input('data')), true);
         $staff = StaffsModel::find($id);
+        $staffs = StaffsModel::all();
         $departments = DepartmentsModel::where('college_id', $staff->college_id)->get();
-        return view('StaffsForm', ['staff' => $staff, 'departments' => $departments]);
+        $college = CollegesModel::find($staff->college_id);
+        return view('Staffs', ['staff' => $staff,'staffs' => $staffs, 'departments' => $departments, 'college' => $college, 'id' => $id]);
     }
 }
