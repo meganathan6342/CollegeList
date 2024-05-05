@@ -32,9 +32,9 @@ Route::put('/update-college/{id}', CollegesController::class.'@updateCollege')->
 
 //depts
 Route::get('/dept-details/{id}', DepartmentsController::class.'@index')->name('dept.details');
-Route::get('/dept-form/{id}', DepartmentsController::class.'@deptForm')->name('dept.form');
 Route::post('dept-form/submit-dept', DepartmentsController::class.'@store')->name('submit.dept');
 Route::get('/delete-depts', DepartmentsController::class.'@deleteDepartments')->name('delete.depts');
+Route::get('/dept-update', DepartmentsController::class.'@updateDeptForm')->name('dept.form');
 Route::get('/edit-dept', DepartmentsController::class.'@updateDeptForm')->name('edit.dept');
 Route::put('/update-dept/{id}', DepartmentsController::class.'@updateDepartment')->name('editing.dept');
 

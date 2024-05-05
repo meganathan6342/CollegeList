@@ -10,10 +10,6 @@ use Illuminate\Http\Request;
 
 class DepartmentsController extends Controller
 {
-    public function deptForm($id)
-    {
-        return view('DepartmentsForm', ["id" => $id]);
-    }
     public function index($id)
     {
         $college = CollegesModel::find($id);
@@ -73,7 +69,12 @@ class DepartmentsController extends Controller
 
     public function updateDeptForm(Request $request)
     {
-        $id = json_decode(urldecode($request->input('data')), true);
+        // $id = json_decode(urldecode($request->input('data')), true);
+        // $department = DepartmentsModel::find($id);
+        // return view('DepartmentsForm', ['department' => $department]);
+
+        // $id = urldecode($request->input('data'), true);
+        $id = $request->input('data');
         $department = DepartmentsModel::find($id);
         return view('DepartmentsForm', ['department' => $department]);
     }

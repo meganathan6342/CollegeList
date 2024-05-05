@@ -110,7 +110,7 @@ a:hover {
     font-size: 17px;
 }
 
-#add-btn {
+.submit {
     background-color: blue;
     height: 27px;
     width: 120px;
@@ -119,7 +119,7 @@ a:hover {
     transition: 200ms;
 }
 
-#add-btn:hover {
+.submit:hover {
     transform: scale(1.02);
     background-color: rgb(0, 0, 230);
 }
@@ -138,4 +138,39 @@ a:hover {
     min-width: 200px;
     border-radius: 5px;
     visibility: hidden;
+}
+
+#backDrop{
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    z-index: 999;
+    visibility: hidden;
+}
+
+#addForm{
+    background-color: white;
+    border-radius: 10px;
+    position: absolute;
+    top: 0%;
+    left: 50%;
+    z-index: 1000;
+    transform: translate(-50%, -50%);
+    visibility: hidden;
+    transition: transform 0.4s, top 0.4s;
+}
+
+#updateForm{
+    background-color: white;
+    border-radius: 10px;
+    position: absolute;
+    top: 0%;
+    left: 50%;
+    z-index: 1000;
+    transform: translate(-50%, -50%);
+    visibility: hidden;
+    transition: transform 0.4s, top 0.4s;
 }

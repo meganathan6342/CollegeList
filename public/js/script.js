@@ -83,6 +83,29 @@ function shuffle(n) {
         }
     }
 }
+function addPopup()
+{
+    document.getElementById("addForm").style.visibility = "visible";
+    document.getElementById("addForm").style.top = "50%";
+    document.getElementById("backDrop").style.visibility = "visible";
+}
+function closePopup() {
+    document.getElementById("addForm").style.visibility = "hidden";
+    document.getElementById("addForm").style.top = "0%";
+    document.getElementById("backDrop").style.visibility = "hidden";
+}
+
+function addUpdatePopup()
+{
+    document.getElementById("updateForm").style.visibility = "visible";
+    document.getElementById("updateForm").style.top = "50%";
+    document.getElementById("backDrop").style.visibility = "visible";
+}
+function closeUpdatePopup() {
+    document.getElementById("updateForm").style.visibility = "hidden";
+    document.getElementById("updateForm").style.top = "0%";
+    document.getElementById("backDrop").style.visibility = "hidden";
+}
 
 // var array_length = 50;
 // var tab_size = 5;

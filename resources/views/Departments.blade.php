@@ -6,14 +6,14 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{{ $college->college_name }} Departments</title>
     <link rel="stylesheet" href="{{ asset('css/style1.css') }}" />
-    <link rel="stylesheet" href="{{ asset('css/form.css') }}" />
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 </head>
 
 <body>
     <div id="mydiv">
         <h1>Departments of {{ $college->college_name }} </h1>
         <input type="text" id="search" onkeyup="searchData()" placeholder="Search" style="margin-left: 600px;">
-        <button id="add-btn" style="color: white;">add dept</button><br><br>
+        <button id="add-btn" class="submit" style="color: white;" onclick="addPopup()">add dept</button><br><br>
         <table id="dataTable">
             <thead>
                 <tr>
@@ -35,7 +35,7 @@
                     <td>{{ $department->dept_id }}</td>
                     <td style="width: 200px;">{{ $department->colleges->college_name }}</td>
                     <td>
-                        <span title="edit" style="color: green;margin-left: 30px;" id="edit" onclick="editDept('<?php echo $department->dept_short_code ?>')"><i class="fa-solid fa-pen-to-square"></i></span>
+                        <span title="edit" style="color: green;margin-left: 30px;" id="edit" onclick="editForm('<?php echo $department->dept_short_code ?>'); addUpdatePopup();"><i class="fa-solid fa-pen-to-square"></i></span>
                         <span title="delete" style="color: red;margin-left: 10px;" id="delete" onclick="deleteDept('<?php echo $department->dept_short_code ?>')"><i class="fa-solid fa-trash"></i></span>
                     </td>
                 </tr>
@@ -53,27 +53,9 @@
             <p style="color: red;" class="warning"></p>
         </div>
     </div>
-    <div id="backdrop" class="backdrop" style="display:none;"></div>
-    <div id="form" style="display: none;">
-        @if(isset($department))
-        <h3>Department Update Form</h3>
-        <form action="{{ route('editing.dept', $department->dept_short_code)}}" method="POST">
-            @csrf
-            @method('PUT')
-            <table>
-                <tbody>
-                    <tr>
-                        <td>Department Name : </td>
-                        <td><input type="text" id="inp1" name="dept_name" value="{{ $department->dept_name }}" required></td>
-                    </tr>
-                    <tr>
-                        <td colspan="2" style="text-align: right;"><input type="submit" value="Update" class="submit"></td>
-                    </tr>
-                </tbody>
-            </table>
-        </form>
-        @else
-        <h3>Department Form</h3>
+    <div id="backDrop"></div>
+    <div id="updateForm" class="forms"></div>
+    <div id="addForm" class="forms">
         <form action="{{ route('submit.dept') }}" method="POST">
             @csrf
             <table>
@@ -86,20 +68,15 @@
                         <td><input type="text" name="dept_name" required></td>
                     </tr>
                     <tr>
-                        <td><button class="submit" onclick="closePopup()">Close</button></td>
+                        <td><button class="submit" onclick="closePopup()" class="submit">Close</button></td>
                         <td style="text-align: right;"><input type="submit" value="Submit" class="submit"></td>
                     </tr>
                 </tbody>
             </table>
         </form>
-        @endif
-        @if(session()->has('message'))
-        <p style="color: green;">{{ session()->get('message') }}</p>
-        @endif
     </div>
     <script src="https://kit.fontawesome.com/52bd1c8b9d.js" crossorigin="anonymous"></script>
     <script src="{{ asset('js/script.js') }}"></script>
-    <script src="{{ asset('js/form.js') }}"></script>
     <script>
         function deleteDept(id) {
             var jsondata = JSON.stringify(id);
@@ -107,10 +84,20 @@
             window.location.href = "{{ route('delete.depts') }}?data=" + encodedata;
         }
 
-        function editDept(id) {
-            var jsondata = JSON.stringify(id);
-            var encodedata = encodeURIComponent(jsondata);
-            window.location.href = "{{ route('edit.dept') }}?data=" + encodedata;
+        function editForm(id) {
+            $(document).ready(function() {
+                $.ajax({
+                    url: "{{route('dept.form')}}",
+                    type: 'GET',
+                    data: {data: id},
+                    success: function(response) {
+                        $('#updateForm').html(response); 
+                    },
+                    error: function(xhr, status, error) {
+                        console.error('Error:', error);
+                    }
+                });
+            });
         }
     </script>
 </body>
