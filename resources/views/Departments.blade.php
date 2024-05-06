@@ -5,14 +5,14 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{{ $college->college_name }} Departments</title>
-    <link rel="stylesheet" href="{{ asset('css/style1.css') }}" />
+    <link rel="stylesheet" href="{{ asset('css/style.css') }}" />
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 </head>
 
 <body>
     <div id="mydiv">
         <h1>Departments of {{ $college->college_name }} </h1>
-        <input type="text" id="search" onkeyup="searchData()" placeholder="Search" style="margin-left: 600px;">
+        <input type="text" id="search" onkeyup="searchData()" placeholder="Search" style="margin-left: 550px;">
         <button id="add-btn" class="submit" style="color: white;" onclick="addPopup()">add dept</button><br><br>
         <table id="dataTable">
             <thead>
@@ -20,7 +20,6 @@
                     <th>No.</th>
                     <th style="width: 200px;" onclick="shuffle(1)">Department Name</th>
                     <th>dept short code</th>
-                    <th>dept id</th>
                     <th style="width: 200px;">college Name</th>
                     <th>Action</th>
                 </tr>
@@ -32,7 +31,6 @@
                     <td><?php echo $a++ . '.'; ?></td>
                     <td style="width: 200px;">{{ $department->dept_name }}</td>
                     <td>{{ $department->dept_short_code }}</td>
-                    <td>{{ $department->dept_id }}</td>
                     <td style="width: 200px;">{{ $department->colleges->college_name }}</td>
                     <td>
                         <span title="edit" style="color: green;margin-left: 30px;" id="edit" onclick="editForm('<?php echo $department->dept_short_code ?>'); addUpdatePopup();"><i class="fa-solid fa-pen-to-square"></i></span>
@@ -51,11 +49,19 @@
             <span style="color: green;">{{ session()->get('message') }}</span>
             @endif
             <p style="color: red;" class="warning"></p>
+            @if($errors->any())
+                <ul>
+                    @foreach($errors->all() as $error)
+                    <li>{{ $error }}</li>
+                    @endforeach
+                </ul>
+            @endif
         </div>
     </div>
     <div id="backDrop"></div>
     <div id="updateForm" class="forms"></div>
     <div id="addForm" class="forms">
+    <button onclick="closePopup()" class="close">X</i></button>
         <form action="{{ route('submit.dept') }}" method="POST">
             @csrf
             <table>
@@ -65,10 +71,11 @@
                     </tr>
                     <tr>
                         <td>Department Name : </td>
-                        <td><input type="text" name="dept_name" required></td>
+                        <td><input type="text" name="dept_name" required id="inp11"></td>
                     </tr>
+                    <tr><td id="msg11" style="visibility: hidden; color: red;">alphabets only allowed</td></tr>
                     <tr>
-                        <td><button class="submit" onclick="closePopup()" class="submit">Close</button></td>
+                        <td></td>
                         <td style="text-align: right;"><input type="submit" value="Submit" class="submit"></td>
                     </tr>
                 </tbody>

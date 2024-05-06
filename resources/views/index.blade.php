@@ -12,7 +12,29 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>College Home Page</title>
-    <link rel="stylesheet" href="{{ asset('css/style1.css') }}" />
+    <link rel="stylesheet" href="{{ asset('css/style.css') }}" />
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <style>
+        .close-btn {
+            background-color: red;
+            color: white;
+            margin-left: 94%;
+            border: 0px;
+            border-radius: 4px;
+        }
+
+        .close-btn:hover {
+            background-color: rgb(214, 9, 9);
+        }
+
+        #addForm {
+            padding: 15px 25px;
+        }
+
+        #updateForm {
+            padding: 15px 25px;
+        }
+    </style>
 </head>
 
 <body>
@@ -26,7 +48,7 @@
             </select>
             <span style="font-size: 16px;">entries per page</span>
             <input type="text" id="search" onkeyup="searchData()" placeholder="Search">
-            <button id="add-btn"><a href="{{ route('colleges') }}">add college</a></button><br><br>
+            <button id="add-btn" class="submit" style="color: white;" onclick="addPopup()">add college</button><br><br>
             <table id="dataTable">
                 <thead>
                     <tr>
@@ -36,11 +58,13 @@
                         <th>Action</th>
                     </tr>
                 </thead>
-                <tbody>
-                    <?php $a = 1; ?>
+                <tbody id="searchedData">
+                    <?php $perPage = $colleges->perPage();
+                    $currentPage = $colleges->currentPage();
+                    $counter = ($currentPage - 1) * $perPage + 1; ?>
                     @forelse($colleges as $college)
                     <tr>
-                        <td><?php echo $a++ . '.'; ?></td>
+                        <td>{{ $counter++ }}</td>
                         <td style="width: 300px;">{{ $college->college_name }}</td>
                         <td style="width: 200px;">
                             {{ $college->addresses->address_id }},
@@ -52,8 +76,8 @@
                         </td>
                         <td>
                             <span title="details" style="color: blue;margin-left: 40px;" onclick="collegeDetails('<?php echo $college->college_id ?>')"><i class="fa-regular fa-file-lines"></i></span>
-                            <span title="edit" style="color: green;margin-left: 10px;" id="edit" onclick="editCollege('<?php echo $college->college_id ?>')"><i class="fa-solid fa-pen-to-square"></i></span>
-                            <span title="delete" style="color: red;margin-left: 10px;" id="delete" onclick="deleteCollege('<?php echo $college->college_id ?>')"><i class="fa-solid fa-trash"></i></span>
+                            <span title="edit" style="color: green;margin-left: 30px;" id="edit" onclick="editForm('<?php echo $college->college_id ?>'); addUpdatePopup();"><i class="fa-solid fa-pen-to-square"></i></span>
+                            <span title="delete" style="color: red;margin-left: 10px;" id="delete" onclick="deleteClg('<?php echo $college->college_id ?>')"><i class="fa-solid fa-trash"></i></span>
                         </td>
                         <td class="college-details" data-college-id="{{ $college->college_id }}">
                             <ul>
@@ -82,22 +106,108 @@
             <p style="color: red;" class="warning"></p>
         </div>
     </div>
+    <div id="backDrop"></div>
+    <div id="updateForm" class="forms"></div>
+    <div id="addForm" class="forms">
+        <button onclick="closePopup()" class="close-btn" style="margin-bottom: 20px;">X</i></button>
+        <form action="{{ route('submit.clg') }}" method="POST">
+            @csrf
+            <table>
+                <tbody>
+                    <tr>
+                        <td>College Name : </td>
+                        <td><input type="text" id="inp11" class="inp" name="college_name" required></td>
+                    </tr>
+                    <tr>
+                        <td id="msg11">alphabets only allowed</td>
+                    </tr>
+                    <tr>
+                        <td>Street 1 : </td>
+                        <td><input type="text" id="inp12" class="inp" name="street_1" required></td>
+                    </tr>
+                    <tr>
+                        <td id="msg12">aspecial char not allowed</td>
+                    </tr>
+                    <tr>
+                        <td>Street 2 : </td>
+                        <td><input type="text" id="inp13" class="inp" name="street_2" required></td>
+                    </tr>
+                    <tr>
+                        <td id="msg13">special char not allowed</td>
+                    </tr>
+                    <tr>
+                        <td>City : </td>
+                        <td><input type="text" id="inp14" class="inp" name="city" required></td>
+                    </tr>
+                    <tr>
+                        <td id="msg14">alphabets only allowed</td>
+                    </tr>
+                    <tr>
+                        <td>State : </td>
+                        <td><input type="text" id="inp15" class="inp" name="state" required></td>
+                    </tr>
+                    <tr>
+                        <td id="msg15">alphabets only allowed</td>
+                    </tr>
+                    <tr>
+                        <td>Country : </td>
+                        <td><input type="text" id="inp16" class="inp" name="country" required></td>
+                    </tr>
+                    <tr>
+                        <td id="msg16">alphabets only allowed</td>
+                    </tr>
+                    <tr>
+                        <td style="text-align: right;" colspan="2"><input type="submit" value="Submit" class="submit"></td>
+                    </tr>
+                </tbody>
+            </table>
+        </form>
+    </div>
 
     <script src="https://kit.fontawesome.com/52bd1c8b9d.js" crossorigin="anonymous"></script>
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    <script src=" https://cdn.jsdelivr.net/npm/bootstrap@3.3.7/dist/js/bootstrap.min.js"></script>
     <script src="{{ asset('js/script.js') }}"></script>
     <script>
-        function deleteCollege(id) {
+        function deleteDept(id) {
             var jsondata = JSON.stringify(id);
             var encodedata = encodeURIComponent(jsondata);
             window.location.href = "{{ route('delete.colleges') }}?data=" + encodedata;
         }
 
-        function editCollege(id) {
-            var jsondata = JSON.stringify(id);
-            var encodedata = encodeURIComponent(jsondata);
-            window.location.href = "{{ route('edit.college') }}?data=" + encodedata;
+        function editForm(id) {
+            $(document).ready(function() {
+                $.ajax({
+                    url: "{{route('clg.form')}}",
+                    type: 'GET',
+                    data: {
+                        data: id
+                    },
+                    success: function(response) {
+                        $('#updateForm').html(response);
+                    },
+                    error: function(xhr, status, error) {
+                        console.error('Error:', error);
+                    }
+                });
+            });
+        }
+
+        function searchData() {
+            let val = document.getElementById("search").value;
+            $(document).ready(function() {
+                $.ajax({
+                    url: "{{route('search.clg')}}",
+                    type: 'GET',
+                    data: {
+                        data: val
+                    },
+                    success: function(response) {
+                        $('#searchedData').html(response);
+                    },
+                    error: function(xhr, status, error) {
+                        console.error('Error:', error);
+                    }
+                });
+            });
         }
 
         function changePerPage() {

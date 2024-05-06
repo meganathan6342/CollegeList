@@ -10,12 +10,6 @@ use Illuminate\Http\Request;
 
 class StudentsController extends Controller
 {
-    public function studentsForm($id)
-    {
-        $college = CollegesModel::find($id);
-        $departments = DepartmentsModel::where('college_id', $id)->get();
-        return view('StudentsForm', ["college" => $college, "departments" => $departments]);
-    }
     public function index($id)
     {
         $college = CollegesModel::find($id);
@@ -60,7 +54,7 @@ class StudentsController extends Controller
             $content++;
             file_put_contents(storage_path('app/texts/generateValueForStudents.txt'), $content);
 
-            return redirect()->route('home.colleges')->with('message', 'stored student details successfully!');
+            return redirect()->back()->with('message', 'stored student details successfully!');
         } catch (\Throwable $th) {
             return redirect()->back()->with('message', 'enter valid dept_short_code or check departments!');
         }
@@ -95,7 +89,7 @@ class StudentsController extends Controller
         $student->dept_short_code = $request->input('dept_short_code');
         $student->save();
 
-        return redirect()->route('home.colleges')->with('success', 'updated student details successfully!');
+        return redirect()->back()->with('success', 'updated student details successfully!');
     }
     public function deleteStudents(Request $request)
     {
@@ -110,7 +104,7 @@ class StudentsController extends Controller
     }
     public function updateStdForm(Request $request)
     {
-        $id = json_decode(urldecode($request->input('data')), true);
+        $id = $request->input('data');
         $student = StudentsModel::find($id);
         $departments = DepartmentsModel::where('college_id', $student->college_id)->get();
         return view('StudentsForm', ['student' => $student, "departments" => $departments]);

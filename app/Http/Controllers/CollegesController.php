@@ -4,9 +4,6 @@ namespace App\Http\Controllers;
 
 use App\Models\AddressesModel;
 use App\Models\CollegesModel;
-use App\Models\DepartmentsModel;
-use App\Models\StaffsModel;
-use App\Models\StudentsModel;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
@@ -38,16 +35,10 @@ class CollegesController extends Controller
 
         return redirect()->route('home.colleges')->with('success', 'stored college successfully!');
     }
-    public function show($id)
-    {
-        $college = DB::select('select * from colleges where college_id = ?', [$id]);
-        $address = DB::select('select * from addresses where address_id = (select address_id from colleges where college_id = ?)', [$id]);
-        return view('CollegeDetails', ["address" => $address, "college" => $college]);
-    }
 
     public function updateClgForm(Request $request)
     {
-        $id = json_decode(urldecode($request->input('data')), true);
+        $id = $request->input('data');
         $college = CollegesModel::find($id);
         return view('CollegesForm', ['college' => $college]);
     }
@@ -77,5 +68,11 @@ class CollegesController extends Controller
             $college->delete();
         }
         return redirect()->back()->with('success', 'deleted college details suceessfully!');
+    }
+    public function search(Request $request)
+    {
+        $value = $request->input('data');
+        $colleges = CollegesModel::where('college_name', 'LIKE', '%' . $value . '%')->get();
+        return view('SearchedColleges', ["colleges" => $colleges]);
     }
 }

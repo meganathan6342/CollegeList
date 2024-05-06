@@ -104,6 +104,7 @@ a {
     color: white;
     font-size: 17px;
 }
+
 a:hover {
     text-decoration: none;
     color: white;
@@ -117,6 +118,7 @@ a:hover {
     border-radius: 5px;
     border-style: none;
     transition: 200ms;
+    color: white;
 }
 
 .submit:hover {
@@ -140,7 +142,7 @@ a:hover {
     visibility: hidden;
 }
 
-#backDrop{
+#backDrop {
     position: absolute;
     top: 0;
     left: 0;
@@ -151,7 +153,7 @@ a:hover {
     visibility: hidden;
 }
 
-#addForm{
+#addForm {
     background-color: white;
     border-radius: 10px;
     position: absolute;
@@ -161,9 +163,10 @@ a:hover {
     transform: translate(-50%, -50%);
     visibility: hidden;
     transition: transform 0.4s, top 0.4s;
+    padding: 10px;
 }
 
-#updateForm{
+#updateForm {
     background-color: white;
     border-radius: 10px;
     position: absolute;
@@ -173,4 +176,37 @@ a:hover {
     transform: translate(-50%, -50%);
     visibility: hidden;
     transition: transform 0.4s, top 0.4s;
+    padding: 10px;
+}
+
+.close {
+    background-color: red;
+    color: white;
+    margin-left: 94%;
+    border: 0px;
+    border-radius: 4px;
+}
+
+.close:hover {
+    background-color: rgb(214, 9, 9);
+}
+
+#msg11,
+#msg12,
+#msg13,
+#msg14,
+#msg15,
+#msg16,
+#msg21,
+#msg22,
+#msg23,
+#msg24,
+#msg25,
+#msg26,
+#dob-msg1,
+#dob-msg2,
+#mob-msg1,
+#mob-msg2 {
+    visibility: hidden;
+    color: red;
 }

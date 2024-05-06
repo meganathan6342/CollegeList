@@ -15,7 +15,7 @@ function collegeDetails(collegeId) {
     });
 }
 
-function searchData() {
+function search() {
     let input, filter, table, tr, td, i, txtValue;
     input = document.getElementById("search");
     filter = input.value.toUpperCase();
@@ -83,8 +83,7 @@ function shuffle(n) {
         }
     }
 }
-function addPopup()
-{
+function addPopup() {
     document.getElementById("addForm").style.visibility = "visible";
     document.getElementById("addForm").style.top = "50%";
     document.getElementById("backDrop").style.visibility = "visible";
@@ -95,8 +94,7 @@ function closePopup() {
     document.getElementById("backDrop").style.visibility = "hidden";
 }
 
-function addUpdatePopup()
-{
+function addUpdatePopup() {
     document.getElementById("updateForm").style.visibility = "visible";
     document.getElementById("updateForm").style.top = "50%";
     document.getElementById("backDrop").style.visibility = "visible";
@@ -107,80 +105,29 @@ function closeUpdatePopup() {
     document.getElementById("backDrop").style.visibility = "hidden";
 }
 
-// var array_length = 50;
-// var tab_size = 5;
-// var start_index = 1;
-// var end_index = 5;
-// var current_index = 1;
-// var max_index = 4;
+let name1 = document.getElementById("inp11");
+name1.addEventListener("input", () => {
+    let value = document.getElementById("inp11").value;
+    for (i = 0; i < value.length; i++) {
+        if (((value[i] <= 'Z' && value[i] >= 'A') || value[1] == '.') || ((value[i] <= 'z' && value[i] >= 'a') || value[1] == '.')) {
+            document.getElementById("msg11").style.visibility = "hidden";
+        }
+        else {
+            document.getElementById("msg11").style.visibility = "visible";
+        }
+    }
+}, false);
 
-// function displayIndexButtons() {
-//     $("#pagination button").remove();
-//     $("#pagination").append('<button><<</button>');
+let name2 = document.getElementById("inp21");
+name1.addEventListener("input", () => {
+    let value = document.getElementById("inp21").value;
+    for (i = 0; i < value.length; i++) {
+        if (((value[i] <= 'Z' && value[i] >= 'A') || value[1] == '.') || ((value[i] <= 'z' && value[i] >= 'a') || value[1] == '.')) {
+            document.getElementById("msg21").style.visibility = "hidden";
+        }
+        else {
+            document.getElementById("msg21").style.visibility = "visible";
+        }
+    }
+}, false);
 
-//     for (i = 1; i <= max_index; i++) {
-//         $("#pagination").append('<button index = "' + i + '">' + i + '</button>');
-//     }
-//     $("#pagination").append('<button>>></button>');
-//     highlight();
-// }
-// displayIndexButtons();
-
-// function highlight() {
-//     start_index = ((current_index - 1) * tab_size) + 1;
-//     end_index = (start_index + tab_size) - 1;
-//     if (end_index > array_length) {
-//         end_index = array_length;
-//     }
-//     $("#footer span").text('Showing '+start_index+' to '+end_index+' of '+array_length+' entries');
-//     $("#pagination button").removeClass('active');
-//     $("#pagination button[index='" + current_index + "']").addClass('active');
-// }
-
-// var current_page = 1;
-// var records_per_page = 10;
-
-// function prevPage() {
-//     if (current_page > 1) {
-//         current_page--;
-//         changePage(current_page);
-//     }
-// }
-
-// function nextPage() {
-//     if (current_page < numPages()) {
-//         current_page++;
-//         changePage(current_page);
-//     }
-// }
-
-// function changePage(page) {
-//     var btn_next = document.getElementById("next");
-//     var btn_prev = document.getElementById("prev");
-//     var table = document.getElementById("dataTable");
-//     var rows = table.getElementsByTagName("tr");
-//     var numPages = Math.ceil(rows.length / records_per_page);
-
-//     if (page < 1) page = 1;
-//     if (page > numPages) page = numPages;
-
-//     for (var i = 1; i < rows.length; i++) {
-//         rows[i].style.display = "none";
-//     }
-
-//     for (var i = (page - 1) * records_per_page + 1; i < (page * records_per_page) + 1; i++) {
-//         if (rows[i]) {
-//             rows[i].style.display = "";
-//         }
-//     }
-
-//     btn_prev.style.visibility = page == 1 ? "hidden" : "visible";
-//     btn_next.style.visibility = page == numPages ? "hidden" : "visible";
-// }
-
-// window.onload = function () {
-//     changePage(1);
-// };
-
-// document.getElementById("prev").addEventListener("click", prevPage);
-// document.getElementById("next").addEventListener("click", nextPage);

@@ -7,17 +7,9 @@ use App\Models\CollegesModel;
 use App\Models\DepartmentsModel;
 use App\Models\StaffsModel;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\DB;
 
 class StaffsController extends Controller
 {
-    public function staffsForm($id)
-    {
-        $college = CollegesModel::find($id);
-        $departments = DepartmentsModel::where('college_id', $id)->get();
-        $staffs = StaffsModel::where('college_id', $id)->get();
-        return view('Staffs', ["college" => $college, "departments" => $departments, "staffs" => $staffs]);
-    }
     public function index($id)
     {
         $college = CollegesModel::find($id);
@@ -54,7 +46,7 @@ class StaffsController extends Controller
             $content++;
             file_put_contents(storage_path('app/texts/generateValueForStaffs.txt'), $content);
 
-            return redirect()->route('home.colleges')->with('message', 'stored staff details successfully!');
+            return redirect()->back()->with('message', 'stored staff details successfully!');
         } catch (\Throwable $th) {
             return redirect()->back()->with('message', 'enter valid dept_short_code or check departments!');
         }
@@ -81,7 +73,7 @@ class StaffsController extends Controller
         $staff->dept_short_code = $request->input('dept_short_code');
         $staff->save();
 
-        return redirect()->route('home.colleges')->with('message', 'updated staff details successfully!');
+        return redirect()->back()->with('message', 'updated staff details successfully!');
     }
     public function deleteStaffs(Request $request)
     {
@@ -96,11 +88,9 @@ class StaffsController extends Controller
     }
     public function updateStfForm(Request $request)
     {
-        $id = json_decode(urldecode($request->input('data')), true);
+        $id = $request->input('data');
         $staff = StaffsModel::find($id);
-        $staffs = StaffsModel::all();
         $departments = DepartmentsModel::where('college_id', $staff->college_id)->get();
-        $college = CollegesModel::find($staff->college_id);
-        return view('Staffs', ['staff' => $staff,'staffs' => $staffs, 'departments' => $departments, 'college' => $college, 'id' => $id]);
+        return view('StaffsForm', ["staff" => $staff, "departments" => $departments]);
     }
 }
