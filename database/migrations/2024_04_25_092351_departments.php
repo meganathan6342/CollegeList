@@ -14,7 +14,6 @@ return new class extends Migration
         Schema::create('departments', function (Blueprint $table) {
             $table->string('dept_short_code')->primary();
             $table->string('dept_name');
-            $table->string('dept_id')->unique();
             $table->unsignedBigInteger('college_id');
             $table->foreign('college_id')->references('college_id')->on('colleges')->onDelete('cascade');
             $table->timestamps();
