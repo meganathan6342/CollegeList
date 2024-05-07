@@ -64,7 +64,7 @@
                     $counter = ($currentPage - 1) * $perPage + 1; ?>
                     @forelse($colleges as $college)
                     <tr>
-                        <td>{{ $counter++ }}</td>
+                        <td>{{ $counter++ }}.</td>
                         <td style="width: 300px;">{{ $college->college_name }}</td>
                         <td style="width: 200px;">
                             {{ $college->addresses->address_id }},
@@ -104,6 +104,13 @@
             <span style="color: green;" class="warning">{{ session()->get('message') }}</span>
             @endif
             <p style="color: red;" class="warning"></p>
+            @if($errors->any())
+            <ul>
+                @foreach($errors->all() as $error)
+                <li>{{ $error }}</li>
+                @endforeach
+            </ul>
+            @endif
         </div>
     </div>
     <div id="backDrop"></div>
@@ -167,10 +174,10 @@
     <script src="https://kit.fontawesome.com/52bd1c8b9d.js" crossorigin="anonymous"></script>
     <script src="{{ asset('js/script.js') }}"></script>
     <script>
-        function deleteDept(id) {
+        function deleteClg(id) {
             var jsondata = JSON.stringify(id);
             var encodedata = encodeURIComponent(jsondata);
-            window.location.href = "{{ route('delete.colleges') }}?data=" + encodedata;
+            window.location.href = "{{ route('delete.college') }}?data=" + encodedata;
         }
 
         function editForm(id) {
@@ -192,6 +199,7 @@
         }
 
         function searchData() {
+            console.log("hiiiii");
             let val = document.getElementById("search").value;
             $(document).ready(function() {
                 $.ajax({

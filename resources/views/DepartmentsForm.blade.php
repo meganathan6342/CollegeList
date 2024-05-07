@@ -1,6 +1,6 @@
 <div class="forms">
-    <button onclick="closeUpdatePopup()" class="close" style="margin-bottom: 20px;">X</button>
-    <form action="{{ route('editing.dept', $department->dept_short_code)}}" method="POST">
+    <button onclick="closeUpdatePopup()" class="close-btn" style="margin-bottom: 20px;">X</button>
+    <form action="{{ route('update.dept', $department->dept_short_code)}}" method="POST">
         @csrf
         @method('PUT')
         <table>

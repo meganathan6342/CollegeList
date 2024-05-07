@@ -183,7 +183,7 @@
         function deleteStudent(id) {
             var jsondata = JSON.stringify(id);
             var encodedata = encodeURIComponent(jsondata);
-            window.location.href = "{{ route('delete.students') }}?data=" + encodedata;
+            window.location.href = "{{ route('delete.student') }}?data=" + encodedata;
         }
 
         function editForm(id) {

@@ -23,31 +23,32 @@ use Illuminate\Support\Facades\Route;
 
 //college
 Route::get('/', CollegesController::class.'@index')->name('index');
-Route::get('/college-form', function() { return view('CollegesForm'); })->name('colleges');
 Route::post('/submit-college', CollegesController::class.'@store')->name('submit.clg');
-Route::get('/home', CollegesController::class.'@index')->name('home.colleges');
-Route::get('/delete-colleges', CollegesController::class.'@deleteColleges')->name('delete.colleges');
-Route::get('/edit-college', CollegesController::class.'@updateClgForm')->name('clg.form');
-Route::put('/update-college/{id}', CollegesController::class.'@updateCollege')->name('editing.college');
+Route::get('/edit-college', CollegesController::class.'@edit')->name('clg.form');
+Route::put('/update-college/{id}', CollegesController::class.'@update')->name('update.college');
+Route::get('/delete-college', CollegesController::class.'@delete')->name('delete.college');
 Route::get('/search-clg', CollegesController::class.'@search')->name('search.clg');
 
 //depts
-Route::get('/dept-details/{id}', DepartmentsController::class.'@index')->name('dept.details');
-Route::post('dept-form/submit-dept', DepartmentsController::class.'@store')->name('submit.dept');
-Route::get('/delete-depts', DepartmentsController::class.'@deleteDepartments')->name('delete.depts');
-Route::get('/dept-update', DepartmentsController::class.'@updateDeptForm')->name('dept.form');
-Route::put('/update-dept/{id}', DepartmentsController::class.'@updateDepartment')->name('editing.dept');
+Route::get('/depts/{id}', DepartmentsController::class.'@index')->name('dept.details');
+Route::post('/submit-dept', DepartmentsController::class.'@store')->name('submit.dept');
+Route::get('/edit-dept', DepartmentsController::class.'@edit')->name('dept.form');
+Route::put('/update-dept/{id}', DepartmentsController::class.'@update')->name('update.dept');
+Route::get('/delete-dept', DepartmentsController::class.'@delete')->name('delete.dept');
+Route::get('/search-dept', DepartmentsController::class.'@search')->name('search.dept');
 
 //staff
-Route::get('/staffs-details/{id}', StaffsController::class.'@index')->name('staffs.details');
+Route::get('/staffs/{id}', StaffsController::class.'@index')->name('staff.details');
 Route::post('/submit-staff', StaffsController::class.'@store')->name('submit.staff');
-Route::get('/delete-staffs', StaffsController::class.'@deleteStaffs')->name('delete.staffs');
-Route::get('/edit-staff', StaffsController::class.'@updateStfForm')->name('staff.form');
-Route::put('/update-staff/{id}', StaffsController::class.'@updateStaff')->name('editing.staff');
+Route::get('/edit-staff', StaffsController::class.'@edit')->name('staff.form');
+Route::put('/update-staff/{id}', StaffsController::class.'@update')->name('update.staff');
+Route::get('/delete-staff', StaffsController::class.'@delete')->name('delete.staff');
+Route::get('/search-staff', StaffsController::class.'@search')->name('search.staff');
 
 //students
-Route::get('/students-details/{id}', StudentsController::class.'@index')->name('students.details');
-Route::post('students-form/submit-student', StudentsController::class.'@store')->name('submit.student');
-Route::get('/delete-students', StudentsController::class.'@deleteStudents')->name('delete.students');
-Route::get('/edit-student', StudentsController::class.'@updateStdForm')->name('student.form');
-Route::put('/update-student/{id}', StudentsController::class.'@updateStudent')->name('editing.student');
+Route::get('/students/{id}', StudentsController::class.'@index')->name('students.details');
+Route::post('/submit-student', StudentsController::class.'@store')->name('submit.student');
+Route::get('/edit-student', StudentsController::class.'@edit')->name('student.form');
+Route::put('/update-student/{id}', StudentsController::class.'@update')->name('update.student');
+Route::get('/delete-student', StudentsController::class.'@delete')->name('delete.student');
+Route::get('/search-student', StudentsController::class.'@search')->name('search.student');

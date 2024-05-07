@@ -2,6 +2,13 @@
 <html lang="en">
 
 <head>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@3.3.7/dist/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+
+    <!-- Optional theme -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@3.3.7/dist/css/bootstrap-theme.min.css" integrity="sha384-rHyoN1iRsVXV4nD0JutlnGaslCJuC7uwjduW9SVrLvRYooPp2bWYgmgJQIXwl/Sp" crossorigin="anonymous">
+
+    <!-- Latest compiled and minified JavaScript -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@3.3.7/dist/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{{ $college->college_name }} Staff's</title>
@@ -33,6 +40,11 @@
 <body>
     <div id="mydiv" style="margin-left: 3px;">
         <h1>Staff's of {{ $college->college_name }} </h1>
+        <select id="rowsPerPage" onchange="changePerPage()">
+            <option value="5" {{ $staffs->perPage() == 5 ? 'selected' : '' }}>5</option>
+            <option value="10" {{ $staffs->perPage() == 10 ? 'selected' : '' }}>10</option>
+            <option value="20" {{ $staffs->perPage() == 20 ? 'selected' : '' }}>20</option>
+        </select>
         <input type="text" id="search" onkeyup="searchData()" placeholder="Search" style="margin-left: 940px;">
         <button id="add-btn" class="submit" style="color: white;" onclick="addPopup()">add staff</button><br><br>
         <table id="dataTable">
@@ -49,11 +61,14 @@
                     <th style="width: 100px;">Staff Dept Name</th>
                     <th style="width: 80px;">Action</th>
                 </tr>
+            </thead>
             <tbody id="searchedData">
-                <?php $a = 1; ?>
+                <?php $perPage = $staffs->perPage();
+                $currentPage = $staffs->currentPage();
+                $counter = ($currentPage - 1) * $perPage + 1; ?>
                 @forelse($staffs as $staff)
                 <tr>
-                    <td><?php echo $a++; ?></td>
+                    <td>{{ $counter++ }}.</td>
                     <td style="width: 150px;">{{ $staff->staff_name }}</td>
                     <td style="width: 100px;">{{ $staff->staff_id }}</td>
                     <td style="width: 80px;">{{ $staff->staff_gender }}</td>
@@ -79,14 +94,23 @@
                 </tr>
                 @endforelse
             </tbody>
-            </thead>
-            <tbody></tbody>
         </table>
+        <div id="footer">
+            <span>Showing 1 to {{ count($staffs) }} of {{ $staffs->total() }}</span>
+            <p id="pg-links" style="margin-left: 150px;">{{ $staffs->appends(['rowsPerPage' => $staffs->perPage()])->links() }} </p>
+        </div>
         <div id="warnings">
             @if(session()->has('message'))
             <span style="color: green;" class="warning">{{ session()->get('message') }}</span>
             @endif
             <p style="color: red;" class="warning"></p>
+            @if($errors->any())
+            <ul style="color: red;">
+                @foreach($errors->all() as $error)
+                <li>{{ $error }}</li>
+                @endforeach
+            </ul>
+            @endif
         </div>
     </div>
     <div id="backDrop"></div>
@@ -181,7 +205,7 @@
         function deleteStaff(id) {
             var jsondata = JSON.stringify(id);
             var encodedata = encodeURIComponent(jsondata);
-            window.location.href = "{{ route('delete.staffs') }}?data=" + encodedata;
+            window.location.href = "{{ route('delete.staff') }}?data=" + encodedata;
         }
 
         function editForm(id) {
@@ -200,6 +224,31 @@
                     }
                 });
             });
+        }
+
+        function searchData() {
+            let val = document.getElementById("search").value;
+            $(document).ready(function() {
+                $.ajax({
+                    url: "{{route('search.staff')}}",
+                    type: 'GET',
+                    data: {
+                        data: val
+                    },
+                    success: function(response) {
+                        $('#searchedData').html(response);
+                    },
+                    error: function(xhr, status, error) {
+                        console.error('Error:', error);
+                    }
+                });
+            });
+        }
+
+        function changePerPage() {
+            var perPage = document.getElementById('rowsPerPage').value;
+            var url = "{{ route('staff.details', $college->college_id) }}" + "?rowsPerPage=" + perPage;
+            window.location.href = url;
         }
     </script>
 </body>

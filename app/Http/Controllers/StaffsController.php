@@ -2,95 +2,101 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\AddressesModel;
-use App\Models\CollegesModel;
-use App\Models\DepartmentsModel;
-use App\Models\StaffsModel;
+use App\Services\StaffsService;
 use Illuminate\Http\Request;
 
 class StaffsController extends Controller
 {
-    public function index($id)
+    protected $staffsService;
+
+    public function __construct(StaffsService $staffsService)
     {
-        $college = CollegesModel::find($id);
-        $departments = DepartmentsModel::where('college_id', $id)->get();
-        $staffs = StaffsModel::where('college_id', $id)->get();
+        $this->staffsService = $staffsService;
+    }
+    public function index(Request $request, $college_id)
+    {
+        $college = $this->staffsService->getCollegeById($college_id);
+        $departments = $this->staffsService->getDeptsByCollegeId($college_id);
+        $perPage = $request->input('rowsPerPage', 5);
+        $staffs = $this->staffsService->getAllStaffs($perPage, $college_id);
         return view('Staffs', ["college" => $college, "departments" => $departments, "staffs" => $staffs]);
     }
     public function store(Request $request)
     {
-        try {
-            $cid = $request->input('college_id');
+        $street_1 = $request->input('street_1');
+        $street_2 = $request->input('street_2');
+        $city = $request->input('city');
+        $state = $request->input('state');
+        $country = $request->input('country');
 
-            $address = new AddressesModel();
-            $address->street_1 = $request->input('street_1');
-            $address->street_2 = $request->input('street_2');
-            $address->city = $request->input('city');
-            $address->state = $request->input('state');
-            $address->country = $request->input('country');
-            $address->save();
+        $addressData = array('street_1' => $street_1, 'street_2' => $street_2, 'city' => $city, 'state' => $state, 'country' => $country);
 
-            $content = file_get_contents(storage_path('app/texts/generateValueForStaffs.txt'));
+        $college_id = $request->input('college_id');
+        $staff_name = $request->input('staff_name');
+        $staff_gender = $request->input('staff_gender');
+        $staff_dob = $request->input('staff_dob');
+        $mobile_no = $request->input('mobile_no');
+        $dept_short_code = $request->input('dept_short_code');
 
-            $staff = new StaffsModel();
-            $staff->staff_id = ($request->input('dept_short_code') . '_' . 'STAFF' . '_' . $content);
-            $staff->staff_name = $request->input('staff_name');
-            $staff->staff_gender = $request->input('staff_gender');
-            $staff->staff_dob = $request->input('staff_dob');
-            $staff->mobile_no = $request->input('mobile_no');
-            $staff->address_id = AddressesModel::latest()->value('address_id');
-            $staff->dept_short_code = $request->input('dept_short_code');
-            $staff->college_id = $cid;
-            $staff->save();
+        $staffData = array('college_id' => $college_id, 'staff_name' => $staff_name, 'staff_gender' => $staff_gender, 'staff_dob' => $staff_dob, 'mobile_no' => $mobile_no, 'dept_short_code' => $dept_short_code);
 
-            $content++;
-            file_put_contents(storage_path('app/texts/generateValueForStaffs.txt'), $content);
+        $staff = $this->staffsService->storeStaff($staffData, $addressData);
 
-            return redirect()->back()->with('message', 'stored staff details successfully!');
-        } catch (\Throwable $th) {
-            return redirect()->back()->with('message', 'enter valid dept_short_code or check departments!');
+        if (is_array($staff)) {
+            return redirect()->back()->withErrors($staff)->withInput();
         }
+
+        return redirect()->back()->with('message', 'staff details are stored successfully..!');
     }
-    public function updateStaff(Request $request, $id)
+    public function edit(Request $request)
+    {
+        $staff_id = $request->input('data');
+        $staff = $this->staffsService->getStaffById($staff_id);
+        $departments = $this->staffsService->getDeptsByCollegeId($staff->college_id);
+        return view('StaffsForm', ["staff" => $staff, "departments" => $departments]);
+    }
+
+    public function update(Request $request, $staff_id)
     {
 
         $address_id = $request->input('address_id');
-        $address = AddressesModel::find($address_id);
-        $address->street_1 = $request->input('street_1');
-        $address->street_2 = $request->input('street_2');
-        $address->city = $request->input('city');
-        $address->state = $request->input('state');
-        $address->country = $request->input('country');
-        $address->save();
+        $street_1 = $request->input('street_1');
+        $street_2 = $request->input('street_2');
+        $city = $request->input('city');
+        $state = $request->input('state');
+        $country = $request->input('country');
 
-        $staff = StaffsModel::find($id);
-        $staff->staff_name = $request->input('staff_name');
-        $staff->staff_gender = $request->input('staff_gender');
-        $staff->staff_dob = $request->input('staff_dob');
-        $staff->mobile_no = $request->input('mobile_no');
-        $staff->address_id = $address_id;
-        $staff->college_id = $request->input('college_id');
-        $staff->dept_short_code = $request->input('dept_short_code');
-        $staff->save();
+        $addressData = array('address_id' => $address_id, 'street_1' => $street_1, 'street_2' => $street_2, 'city' => $city, 'state' => $state, 'country' => $country);
 
-        return redirect()->back()->with('message', 'updated staff details successfully!');
-    }
-    public function deleteStaffs(Request $request)
-    {
-        $id = json_decode(urldecode($request->input('data')), true);
+        $college_id = $request->input('college_id');
+        $staff_name = $request->input('staff_name');
+        $staff_gender = $request->input('staff_gender');
+        $staff_dob = $request->input('staff_dob');
+        $mobile_no = $request->input('mobile_no');
+        $dept_short_code = $request->input('dept_short_code');
 
-        $staff = StaffsModel::find($id);
-        if(!empty($staff)) {
-            $staff->delete();
+        $staffData = array('college_id' => $college_id, 'staff_id' => $staff_id, 'staff_name' => $staff_name, 'staff_gender' => $staff_gender, 'staff_dob' => $staff_dob, 'mobile_no' => $mobile_no, 'dept_short_code' => $dept_short_code);
+
+        $staff = $this->staffsService->storeStaff($staffData, $addressData);
+
+        if (is_array($staff)) {
+            return redirect()->back()->withErrors($staff)->withInput();
         }
+
+        return redirect()->back()->with('message', 'staff details are stored successfully..!');
+    }
+    public function delete(Request $request)
+    {
+        $staff_id = json_decode(urldecode($request->input('data')), true);
+
+        $staff = $this->staffsService->deleteStaff($staff_id);
 
         return redirect()->back()->with('message', 'deleted staff details suceessfully!');
     }
-    public function updateStfForm(Request $request)
+    public function search(Request $request)
     {
-        $id = $request->input('data');
-        $staff = StaffsModel::find($id);
-        $departments = DepartmentsModel::where('college_id', $staff->college_id)->get();
-        return view('StaffsForm', ["staff" => $staff, "departments" => $departments]);
+        $value = $request->input('data');
+        $staffs = $this->staffsService->searchStaff($value);
+        return view('SearchedStaffs', ["staffs" => $staffs]);
     }
 }

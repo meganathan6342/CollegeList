@@ -2,77 +2,82 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\AddressesModel;
-use App\Models\CollegesModel;
+use App\Services\CollegesService;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\DB;
 
 class CollegesController extends Controller
 {
+    protected $collegesService;
+
+    public function __construct(CollegesService $collegesService)
+    {
+        $this->collegesService = $collegesService;
+    }
     public function index(Request $request)
     {
-        // $colleges = CollegesModel::all();
-        // return view('index', ["colleges" => $colleges]);
-
         $perPage = $request->input('rowsPerPage', 5);
-        $colleges = CollegesModel::paginate($perPage);
+        $colleges = $this->collegesService->getAllColleges($perPage);
         return view('index', compact('colleges'));
     }
+
     public function store(Request $request)
     {
-        $address = new AddressesModel();
-        $address->street_1 = $request->input('street_1');
-        $address->street_2 = $request->input('street_2');
-        $address->city = $request->input('city');
-        $address->state = $request->input('state');
-        $address->country = $request->input('country');
-        $address->save();
+        $street_1 = $request->input('street_1');
+        $street_2 = $request->input('street_2');
+        $city = $request->input('city');
+        $state = $request->input('state');
+        $country = $request->input('country');
+        $address = array('street_1' => $street_1, 'street_2' => $street_2, 'city' => $city, 'state' => $state, 'country' => $country);
 
-        $college = new CollegesModel();
-        $college->college_name = $request->input('college_name');
-        $college->address_id = AddressesModel::latest()->value('address_id');
-        $college->save();
+        $college_name = $request->input('college_name');
+        $college = array('college_name' => $college_name);
 
-        return redirect()->route('home.colleges')->with('success', 'stored college successfully!');
+        $data = $this->collegesService->storeCollege($college, $address);
+
+        if (is_array($data)) {
+            return redirect()->back()->withErrors($data)->withInput();
+        }
+        return redirect()->back()->with('message', 'college details stored successfully!');
     }
 
-    public function updateClgForm(Request $request)
+    public function edit(Request $request)
     {
-        $id = $request->input('data');
-        $college = CollegesModel::find($id);
+        $college_id = $request->input('data');
+        $college = $this->collegesService->getCollegeById($college_id);
         return view('CollegesForm', ['college' => $college]);
     }
-    public function updateCollege(Request $request, $id)
+    public function update(Request $request, $college_id)
     {
         $address_id = $request->input('address_id');
-        $address = AddressesModel::find($address_id);
-        $address->street_1 = $request->input('street_1');
-        $address->street_2 = $request->input('street_2');
-        $address->city = $request->input('city');
-        $address->state = $request->input('state');
-        $address->country = $request->input('country');
-        $address->save();
+        $street_1 = $request->input('street_1');
+        $street_2 = $request->input('street_2');
+        $city = $request->input('city');
+        $state = $request->input('state');
+        $country = $request->input('country');
+        $address = array('address_id' => $address_id, 'street_1' => $street_1, 'street_2' => $street_2, 'city' => $city, 'state' => $state, 'country' => $country);
 
-        $college = CollegesModel::find($id);
-        $college->college_name = $request->input('college_name');
-        $college->save();
 
-        return redirect()->route('home.colleges')->with('success', 'updated college details successfully!');
-    }
-    public function deleteColleges(Request $request)
-    {
-        $id = json_decode(urldecode($request->input('data')), true);
+        $college_name = $request->input('college_name');
+        $college = array('college_id' => $college_id, 'college_name' => $college_name);
 
-        $college = CollegesModel::find($id);
-        if (!empty($college)) {
-            $college->delete();
+        $data = $this->collegesService->updateCollege($college, $address);
+
+        if (is_array($data)) {
+            return redirect()->back()->withErrors($data)->withInput();
         }
-        return redirect()->back()->with('success', 'deleted college details suceessfully!');
+        return redirect()->back()->with('message', 'updated college details successfully!');
+    }
+    public function delete(Request $request)
+    {
+        $college_id = json_decode(urldecode($request->input('data')), true);
+
+        $data = $this->collegesService->deleteCollege($college_id);
+        return redirect()->back()->with('message', 'deleted college details suceessfully!');
     }
     public function search(Request $request)
     {
         $value = $request->input('data');
-        $colleges = CollegesModel::where('college_name', 'LIKE', '%' . $value . '%')->get();
+        $colleges = $this->collegesService->searchCollege($value);
         return view('SearchedColleges', ["colleges" => $colleges]);
     }
 }

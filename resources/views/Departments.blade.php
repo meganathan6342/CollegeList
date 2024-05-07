@@ -2,17 +2,42 @@
 <html lang="en">
 
 <head>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@3.3.7/dist/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+
+    <!-- Optional theme -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@3.3.7/dist/css/bootstrap-theme.min.css" integrity="sha384-rHyoN1iRsVXV4nD0JutlnGaslCJuC7uwjduW9SVrLvRYooPp2bWYgmgJQIXwl/Sp" crossorigin="anonymous">
+
+    <!-- Latest compiled and minified JavaScript -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@3.3.7/dist/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{{ $college->college_name }} Departments</title>
     <link rel="stylesheet" href="{{ asset('css/style.css') }}" />
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <style>
+        .close-btn {
+            background-color: red;
+            color: white;
+            margin-left: 94%;
+            border: 0px;
+            border-radius: 4px;
+        }
+
+        .close-btn:hover {
+            background-color: rgb(214, 9, 9);
+        }
+    </style>
 </head>
 
 <body>
     <div id="mydiv">
-        <h1>Departments of {{ $college->college_name }} </h1>
-        <input type="text" id="search" onkeyup="searchData()" placeholder="Search" style="margin-left: 550px;">
+        <h3>Departments of {{ $college->college_name }} </h3>
+        <select id="rowsPerPage" onchange="changePerPage()">
+            <option value="5" {{ $departments->perPage() == 5 ? 'selected' : '' }}>5</option>
+            <option value="10" {{ $departments->perPage() == 10 ? 'selected' : '' }}>10</option>
+            <option value="20" {{ $departments->perPage() == 20 ? 'selected' : '' }}>20</option>
+        </select>
+        <input type="text" id="search" onkeyup="searchData()" placeholder="Search" style="margin-left: 420px;">
         <button id="add-btn" class="submit" style="color: white;" onclick="addPopup()">add dept</button><br><br>
         <table id="dataTable">
             <thead>
@@ -24,16 +49,18 @@
                     <th>Action</th>
                 </tr>
             </thead>
-            <tbody>
-                <?php $a = 1; ?>
+            <tbody id="searchedData">
+                <?php $perPage = $departments->perPage();
+                $currentPage = $departments->currentPage();
+                $counter = ($currentPage - 1) * $perPage + 1; ?>
                 @forelse($departments as $department)
                 <tr>
-                    <td><?php echo $a++ . '.'; ?></td>
+                    <td>{{ $counter++ }}.</td>
                     <td style="width: 200px;">{{ $department->dept_name }}</td>
                     <td>{{ $department->dept_short_code }}</td>
                     <td style="width: 200px;">{{ $department->colleges->college_name }}</td>
                     <td>
-                        <span title="edit" style="color: green;margin-left: 30px;" id="edit" onclick="editForm('<?php echo $department->dept_short_code ?>'); addUpdatePopup();"><i class="fa-solid fa-pen-to-square"></i></span>
+                        <span title="edit" style="color: green;margin-left: 20px;" id="edit" onclick="editForm('<?php echo $department->dept_short_code ?>'); addUpdatePopup();"><i class="fa-solid fa-pen-to-square"></i></span>
                         <span title="delete" style="color: red;margin-left: 10px;" id="delete" onclick="deleteDept('<?php echo $department->dept_short_code ?>')"><i class="fa-solid fa-trash"></i></span>
                     </td>
                 </tr>
@@ -44,24 +71,28 @@
                 @endforelse
             </tbody>
         </table>
+        <div id="footer">
+            <span>Showing 1 to {{ count($departments) }} of {{ $departments->total() }}</span>
+            <p id="pg-links" style="margin-left: 150px;">{{ $departments->appends(['rowsPerPage' => $departments->perPage()])->links() }} </p>
+        </div>
         <div id="warnings">
             @if(session()->has('message'))
             <span style="color: green;">{{ session()->get('message') }}</span>
             @endif
             <p style="color: red;" class="warning"></p>
             @if($errors->any())
-                <ul>
-                    @foreach($errors->all() as $error)
-                    <li>{{ $error }}</li>
-                    @endforeach
-                </ul>
+            <ul style="color: red;">
+                @foreach($errors->all() as $error)
+                <li>{{ $error }}</li>
+                @endforeach
+            </ul>
             @endif
         </div>
     </div>
     <div id="backDrop"></div>
     <div id="updateForm" class="forms"></div>
     <div id="addForm" class="forms">
-    <button onclick="closePopup()" class="close">X</i></button>
+        <button onclick="closePopup()" class="close-btn">X</i></button>
         <form action="{{ route('submit.dept') }}" method="POST">
             @csrf
             <table>
@@ -73,7 +104,9 @@
                         <td>Department Name : </td>
                         <td><input type="text" name="dept_name" required id="inp11"></td>
                     </tr>
-                    <tr><td id="msg11" style="visibility: hidden; color: red;">alphabets only allowed</td></tr>
+                    <tr>
+                        <td id="msg11" style="visibility: hidden; color: red;">alphabets only allowed</td>
+                    </tr>
                     <tr>
                         <td></td>
                         <td style="text-align: right;"><input type="submit" value="Submit" class="submit"></td>
@@ -88,7 +121,7 @@
         function deleteDept(id) {
             var jsondata = JSON.stringify(id);
             var encodedata = encodeURIComponent(jsondata);
-            window.location.href = "{{ route('delete.depts') }}?data=" + encodedata;
+            window.location.href = "{{ route('delete.dept') }}?data=" + encodedata;
         }
 
         function editForm(id) {
@@ -96,15 +129,42 @@
                 $.ajax({
                     url: "{{route('dept.form')}}",
                     type: 'GET',
-                    data: {data: id},
+                    data: {
+                        data: id
+                    },
                     success: function(response) {
-                        $('#updateForm').html(response); 
+                        $('#updateForm').html(response);
                     },
                     error: function(xhr, status, error) {
                         console.error('Error:', error);
                     }
                 });
             });
+        }
+
+        function searchData() {
+            let val = document.getElementById("search").value;
+            $(document).ready(function() {
+                $.ajax({
+                    url: "{{route('search.dept')}}",
+                    type: 'GET',
+                    data: {
+                        data: val
+                    },
+                    success: function(response) {
+                        $('#searchedData').html(response);
+                    },
+                    error: function(xhr, status, error) {
+                        console.error('Error:', error);
+                    }
+                });
+            });
+        }
+
+        function changePerPage() {
+            var perPage = document.getElementById('rowsPerPage').value;
+            var url = "{{ route('dept.details', $college->college_id) }}" + "?rowsPerPage=" + perPage;
+            window.location.href = url;
         }
     </script>
 </body>

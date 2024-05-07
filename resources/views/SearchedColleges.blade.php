@@ -2,7 +2,7 @@
     <tbody>
         @forelse($colleges as $college)
         <tr>
-            <td>{{ $college->college_id }}</td>
+            <td>{{ $counter++ }}</td>
             <td style="width: 300px;">{{ $college->college_name }}</td>
             <td style="width: 200px;">
                 {{ $college->addresses->address_id }},

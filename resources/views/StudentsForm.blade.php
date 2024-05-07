@@ -1,6 +1,6 @@
 <div class="forms">
     <button onclick="closeUpdatePopup()" class="close-btn">X</i></button>
-    <form action="{{ route('editing.student', $student->student_id)}}" method="POST">
+    <form action="{{ route('update.student', $student->student_id)}}" method="POST">
         @csrf
         @method('PUT')
         <table>
