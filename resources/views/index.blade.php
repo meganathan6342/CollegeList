@@ -7,34 +7,14 @@
     <!-- Optional theme -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@3.3.7/dist/css/bootstrap-theme.min.css" integrity="sha384-rHyoN1iRsVXV4nD0JutlnGaslCJuC7uwjduW9SVrLvRYooPp2bWYgmgJQIXwl/Sp" crossorigin="anonymous">
 
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     <!-- Latest compiled and minified JavaScript -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@3.3.7/dist/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>College Home Page</title>
     <link rel="stylesheet" href="{{ asset('css/style.css') }}" />
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-    <style>
-        .close-btn {
-            background-color: red;
-            color: white;
-            margin-left: 94%;
-            border: 0px;
-            border-radius: 4px;
-        }
-
-        .close-btn:hover {
-            background-color: rgb(214, 9, 9);
-        }
-
-        #addForm {
-            padding: 15px 25px;
-        }
-
-        #updateForm {
-            padding: 15px 25px;
-        }
-    </style>
+    <link rel="stylesheet" href="{{ asset('css/index.css') }}" />
 </head>
 
 <body>
@@ -54,8 +34,8 @@
                     <tr>
                         <th>No.</th>
                         <th style="width: 300px;" onclick="shuffle(1)">College</th>
-                        <th>Address</th>
-                        <th>Action</th>
+                        <th style="width: 300px;">Address</th>
+                        <th style="width: 150px;">Action</th>
                     </tr>
                 </thead>
                 <tbody id="searchedData">
@@ -66,7 +46,7 @@
                     <tr>
                         <td>{{ $counter++ }}.</td>
                         <td style="width: 300px;">{{ $college->college_name }}</td>
-                        <td style="width: 200px;">
+                        <td style="width: 300px;">
                             {{ $college->addresses->address_id }},
                             {{ $college->addresses->street_1 }},
                             {{ $college->addresses->street_2 }},
@@ -74,16 +54,16 @@
                             {{ $college->addresses->state }},
                             {{ $college->addresses->country }}
                         </td>
-                        <td>
-                            <span title="details" style="color: blue;margin-left: 40px;" onclick="collegeDetails('<?php echo $college->college_id ?>')"><i class="fa-regular fa-file-lines"></i></span>
-                            <span title="edit" style="color: green;margin-left: 30px;" id="edit" onclick="editForm('<?php echo $college->college_id ?>'); addUpdatePopup();"><i class="fa-solid fa-pen-to-square"></i></span>
-                            <span title="delete" style="color: red;margin-left: 10px;" id="delete" onclick="deleteClg('<?php echo $college->college_id ?>')"><i class="fa-solid fa-trash"></i></span>
+                        <td style="width: 150px;">
+                            <span title="details" style="color: blue;margin-left: 30px;" id="toggleButton" onclick="collegeDetails('<?php echo $college->college_id ?>')"><i class="fa-regular fa-file-lines"></i></span>
+                            <span title="edit" style="color: green;margin-left: 15px;" id="edit" onclick="editForm('<?php echo $college->college_id ?>'); addUpdatePopup();"><i class="fa-solid fa-pen-to-square"></i></span>
+                            <span title="delete" style="color: red;margin-left: 15px;" id="delete" onclick="deleteClg('<?php echo $college->college_id ?>')"><i class="fa-solid fa-trash"></i></span>
                         </td>
                         <td class="college-details" data-college-id="{{ $college->college_id }}">
                             <ul>
                                 <li><a href="{{ route('dept.details', ['id' => $college->college_id]) }}">Departments</a></li>
-                                <li><a href="{{ route('staffs.details', ['id' => $college->college_id]) }}">Staff's</a></li>
-                                <li><a href="{{ route('students.details', ['id' => $college->college_id]) }}">Students</a></li>
+                                <li><a href="{{ route('staff.details', ['id' => $college->college_id]) }}">Staff's</a></li>
+                                <li><a href="{{ route('student.details', ['id' => $college->college_id]) }}">Students</a></li>
                             </ul>
                         </td>
                     </tr>
@@ -101,11 +81,14 @@
         </div>
         <div id="warnings">
             @if(session()->has('message'))
-            <span style="color: green;" class="warning">{{ session()->get('message') }}</span>
+            <span style="color: green;">{{ session()->get('message') }}</span>
+            @endif
+            @if(session()->has('error'))
+            <span style="color: green;">{{ session()->get('error') }}</span>
             @endif
             <p style="color: red;" class="warning"></p>
             @if($errors->any())
-            <ul>
+            <ul id="validation-errors">
                 @foreach($errors->all() as $error)
                 <li>{{ $error }}</li>
                 @endforeach
@@ -123,45 +106,45 @@
                 <tbody>
                     <tr>
                         <td>College Name : </td>
-                        <td><input type="text" id="inp11" class="inp" name="college_name" required></td>
+                        <td><input type="text" id="inp11" class="inp" name="college_name" required onkeyup="alphabetValidation(this.value, 0)"></td>
                     </tr>
                     <tr>
-                        <td id="msg11">alphabets only allowed</td>
+                        <td class="al-msgs">alphabets only allowed</td>
                     </tr>
                     <tr>
                         <td>Street 1 : </td>
-                        <td><input type="text" id="inp12" class="inp" name="street_1" required></td>
+                        <td><input type="text" id="inp12" class="inp" name="street_1" required onkeyup="streetValidation(this.value, 0)"></td>
                     </tr>
                     <tr>
-                        <td id="msg12">aspecial char not allowed</td>
+                        <td class="st-msgs">special chars not allowed</td>
                     </tr>
                     <tr>
                         <td>Street 2 : </td>
-                        <td><input type="text" id="inp13" class="inp" name="street_2" required></td>
+                        <td><input type="text" id="inp13" class="inp" name="street_2" placeholder="Optional" onkeyup="streetValidation(this.value, 1)"></td>
                     </tr>
                     <tr>
-                        <td id="msg13">special char not allowed</td>
+                        <td class="st-msgs">special chars not allowed</td>
                     </tr>
                     <tr>
                         <td>City : </td>
-                        <td><input type="text" id="inp14" class="inp" name="city" required></td>
+                        <td><input type="text" id="inp14" class="inp" name="city" required onkeyup="alphabetValidation(this.value, 1)"></td>
                     </tr>
                     <tr>
-                        <td id="msg14">alphabets only allowed</td>
+                        <td class="al-msgs">alphabets only allowed</td>
                     </tr>
                     <tr>
                         <td>State : </td>
-                        <td><input type="text" id="inp15" class="inp" name="state" required></td>
+                        <td><input type="text" id="inp15" class="inp" name="state" required onkeyup="alphabetValidation(this.value, 2)"></td>
                     </tr>
                     <tr>
-                        <td id="msg15">alphabets only allowed</td>
+                        <td class="al-msgs">alphabets only allowed</td>
                     </tr>
                     <tr>
                         <td>Country : </td>
-                        <td><input type="text" id="inp16" class="inp" name="country" required></td>
+                        <td><input type="text" id="inp16" class="inp" name="country" required onkeyup="alphabetValidation(this.value, 3)"></td>
                     </tr>
                     <tr>
-                        <td id="msg16">alphabets only allowed</td>
+                        <td class="al-msgs">alphabets only allowed</td>
                     </tr>
                     <tr>
                         <td style="text-align: right;" colspan="2"><input type="submit" value="Submit" class="submit"></td>
@@ -173,11 +156,12 @@
 
     <script src="https://kit.fontawesome.com/52bd1c8b9d.js" crossorigin="anonymous"></script>
     <script src="{{ asset('js/script.js') }}"></script>
+    <script src="{{ asset('js/validation.js') }}"></script>
     <script>
         function deleteClg(id) {
             var jsondata = JSON.stringify(id);
             var encodedata = encodeURIComponent(jsondata);
-            window.location.href = "{{ route('delete.college') }}?data=" + encodedata;
+            window.location.href = "{{ route('delete.clg') }}?data=" + encodedata;
         }
 
         function editForm(id) {
@@ -199,7 +183,6 @@
         }
 
         function searchData() {
-            console.log("hiiiii");
             let val = document.getElementById("search").value;
             $(document).ready(function() {
                 $.ajax({

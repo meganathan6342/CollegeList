@@ -1,4 +1,4 @@
-<?php 
+<?php
 
 namespace App\Repositories;
 
@@ -19,37 +19,45 @@ class CollegesRepository
 
     public function store($collegeData, $addressData)
     {
-        $address = new AddressesModel();
-        $address->street_1 = $addressData['street_1'];
-        $address->street_2 = $addressData['street_2'];
-        $address->city = $addressData['city'];
-        $address->state = $addressData['state'];
-        $address->country = $addressData['country'];
-        $address->save();
+        try {
+            $address = new AddressesModel();
+            $address->street_1 = $addressData['street_1'];
+            $address->street_2 = $addressData['street_2'];
+            $address->city = $addressData['city'];
+            $address->state = $addressData['state'];
+            $address->country = $addressData['country'];
+            $address->save();
 
-        $college = new CollegesModel();
-        $college->college_name = $collegeData['college_name'];
-        $college->address_id = AddressesModel::latest()->value('address_id');
-        $college->save();
+            $college = new CollegesModel();
+            $college->college_name = $collegeData['college_name'];
+            $college->address_id = AddressesModel::latest()->value('address_id');
+            $college->save();
 
-        return $college;
+            return $college;
+        } catch (\Throwable $th) {
+            return 'college is already presented.. :(';
+        }
     }
 
     public function update($collegeData, $addressData)
     {
-        $address = AddressesModel::find($addressData['address_id']);
-        $address->street_1 = $addressData['street_1'];
-        $address->street_2 = $addressData['street_2'];
-        $address->city = $addressData['city'];
-        $address->state = $addressData['state'];
-        $address->country = $addressData['country'];
-        $address->save();
+        try {
+            $address = AddressesModel::find($addressData['address_id']);
+            $address->street_1 = $addressData['street_1'];
+            $address->street_2 = $addressData['street_2'];
+            $address->city = $addressData['city'];
+            $address->state = $addressData['state'];
+            $address->country = $addressData['country'];
+            $address->save();
 
-        $college = CollegesModel::find($collegeData['college_id']);
-        $college->college_name = $collegeData['college_name'];
-        $college->save();
+            $college = CollegesModel::find($collegeData['college_id']);
+            $college->college_name = $collegeData['college_name'];
+            $college->save();
 
-        return $college;
+            return $college;
+        } catch (\Throwable $th) {
+            return 'something went wrong.. :(';
+        }
     }
 
     public function delete($college_id)

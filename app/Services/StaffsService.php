@@ -38,7 +38,7 @@ class StaffsService
     {
         $addressValidator = Validator::make($addressData, [
             'street_1' => 'required|regex:/^[a-zA-Z0-9\s]*$/|max:45',
-            'street_2' => 'regex:/^[a-zA-Z0-9\s]*$/|max:45',
+            'street_2' => 'nullable|regex:/^[a-zA-Z0-9\s]*$/|max:45',
             'city' => 'required|regex:/^[a-zA-Z\s]+$/|max:255',
             'state' => 'required|regex:/^[a-zA-Z\s]+$/|max:255',
             'country' => 'required|regex:/^[a-zA-Z\s]+$/|max:255',
@@ -65,14 +65,13 @@ class StaffsService
 
         $staffValidator = Validator::make($staffData, [
             'staff_name' => 'required|regex:/^[a-zA-Z\s]+$/|max:45',
-            'staff_dob' => 'required|regex:/^(198\d|199\d|2000)-(0[1-9]|1[0-2])-(0[1-9]|[12][0-9]|3[01])$/',
+            'staff_dob' => 'required',
             'mobile_no' => 'required|regex:/^[6-9]\d{9}$/',
         ], [
             'staff_name.required' => 'staff name is required',
             'staff_name.regex' => 'alphabets only allowed',
             'staff_name.max' => 'staff name is too long',
             'staff_dob.required' => 'staff dob is required',
-            'staff_dob.regex' => 'please select eligible age',
             'mobile_no.required' => 'mobile nubmber is required',
             'mobile_no.regex' => 'please enter valid mobile number',
         ]);
@@ -99,7 +98,7 @@ class StaffsService
     {
         $addressValidator = Validator::make($addressData, [
             'street_1' => 'required|regex:/^[a-zA-Z0-9\s]*$/|max:45',
-            'street_2' => 'regex:/^[a-zA-Z0-9\s]*$/|max:45',
+            'street_2' => 'nullable|regex:/^[a-zA-Z0-9\s]*$/|max:45',
             'city' => 'required|regex:/^[a-zA-Z\s]+$/|max:255',
             'state' => 'required|regex:/^[a-zA-Z\s]+$/|max:255',
             'country' => 'required|regex:/^[a-zA-Z\s]+$/|max:255',
@@ -126,14 +125,13 @@ class StaffsService
 
         $staffValidator = Validator::make($staffData, [
             'staff_name' => 'required|regex:/^[a-zA-Z\s]+$/|max:45',
-            'staff_dob' => 'required|regex:/^(198\d|199\d|2000)-(0[1-9]|1[0-2])-(0[1-9]|[12][0-9]|3[01])$/',
+            'staff_dob' => 'required',
             'mobile_no' => 'required|regex:/^[6-9]\d{9}$/',
         ], [
             'staff_name.required' => 'staff name is required',
             'staff_name.regex' => 'alphabets only allowed',
             'staff_name.max' => 'staff name is too long',
             'staff_dob.required' => 'staff dob is required',
-            'staff_dob.regex' => 'please select eligible age',
             'mobile_no.required' => 'mobile nubmber is required',
             'mobile_no.regex' => 'please enter valid mobile number',
         ]);
@@ -147,7 +145,13 @@ class StaffsService
 
     public function deleteStaff($staff_id)
     {
-        return $this->staffsRepository->delete($staff_id);
+        $staff = $this->staffsRepository->delete($staff_id);
+        if(!empty($staff)) {
+            $content = file_get_contents(storage_path('app/texts/generateValueForStaffs.txt'));
+            $content--;
+            file_put_contents(storage_path('app/texts/generateValueForStaffs.txt'), $content);
+        }
+        return $staff;
     }
 
     public function searchStaff($value)

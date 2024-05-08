@@ -37,7 +37,10 @@ class CollegesController extends Controller
         if (is_array($data)) {
             return redirect()->back()->withErrors($data)->withInput();
         }
-        return redirect()->back()->with('message', 'college details stored successfully!');
+        if (is_string($data)) {
+            return redirect()->back()->with('error', $data);
+        }
+        return redirect()->back()->with('message', 'stored college details..!');
     }
 
     public function edit(Request $request)
@@ -65,14 +68,17 @@ class CollegesController extends Controller
         if (is_array($data)) {
             return redirect()->back()->withErrors($data)->withInput();
         }
-        return redirect()->back()->with('message', 'updated college details successfully!');
+        if (is_string($data)) {
+            return redirect()->back()->with('error', $data);
+        }
+        return redirect()->back()->with('message', 'updated college details..!');
     }
     public function delete(Request $request)
     {
         $college_id = json_decode(urldecode($request->input('data')), true);
 
         $data = $this->collegesService->deleteCollege($college_id);
-        return redirect()->back()->with('message', 'deleted college details suceessfully!');
+        return redirect()->back()->with('message', 'deleted college details..!');
     }
     public function search(Request $request)
     {

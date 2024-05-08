@@ -7,26 +7,14 @@
     <!-- Optional theme -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@3.3.7/dist/css/bootstrap-theme.min.css" integrity="sha384-rHyoN1iRsVXV4nD0JutlnGaslCJuC7uwjduW9SVrLvRYooPp2bWYgmgJQIXwl/Sp" crossorigin="anonymous">
 
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     <!-- Latest compiled and minified JavaScript -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@3.3.7/dist/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{{ $college->college_name }} Departments</title>
     <link rel="stylesheet" href="{{ asset('css/style.css') }}" />
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-    <style>
-        .close-btn {
-            background-color: red;
-            color: white;
-            margin-left: 94%;
-            border: 0px;
-            border-radius: 4px;
-        }
-
-        .close-btn:hover {
-            background-color: rgb(214, 9, 9);
-        }
-    </style>
+    <link rel="stylesheet" href="{{ asset('css/Departments.css') }}" />
 </head>
 
 <body>
@@ -37,16 +25,16 @@
             <option value="10" {{ $departments->perPage() == 10 ? 'selected' : '' }}>10</option>
             <option value="20" {{ $departments->perPage() == 20 ? 'selected' : '' }}>20</option>
         </select>
-        <input type="text" id="search" onkeyup="searchData()" placeholder="Search" style="margin-left: 420px;">
-        <button id="add-btn" class="submit" style="color: white;" onclick="addPopup()">add dept</button><br><br>
+        <input type="text" id="search" onkeyup="searchData()" placeholder="Search">
+        <button id="add-btn" class="submit" onclick="addPopup()">add dept</button><br><br>
         <table id="dataTable">
             <thead>
                 <tr>
                     <th>No.</th>
                     <th style="width: 200px;" onclick="shuffle(1)">Department Name</th>
                     <th>dept short code</th>
-                    <th style="width: 200px;">college Name</th>
-                    <th>Action</th>
+                    <th style="width: 300px;">college Name</th>
+                    <th style="width: 100px;">Action</th>
                 </tr>
             </thead>
             <tbody id="searchedData">
@@ -58,8 +46,8 @@
                     <td>{{ $counter++ }}.</td>
                     <td style="width: 200px;">{{ $department->dept_name }}</td>
                     <td>{{ $department->dept_short_code }}</td>
-                    <td style="width: 200px;">{{ $department->colleges->college_name }}</td>
-                    <td>
+                    <td style="width: 300px;">{{ $department->colleges->college_name }}</td>
+                    <td style="width: 100px;">
                         <span title="edit" style="color: green;margin-left: 20px;" id="edit" onclick="editForm('<?php echo $department->dept_short_code ?>'); addUpdatePopup();"><i class="fa-solid fa-pen-to-square"></i></span>
                         <span title="delete" style="color: red;margin-left: 10px;" id="delete" onclick="deleteDept('<?php echo $department->dept_short_code ?>')"><i class="fa-solid fa-trash"></i></span>
                     </td>
@@ -73,11 +61,14 @@
         </table>
         <div id="footer">
             <span>Showing 1 to {{ count($departments) }} of {{ $departments->total() }}</span>
-            <p id="pg-links" style="margin-left: 150px;">{{ $departments->appends(['rowsPerPage' => $departments->perPage()])->links() }} </p>
+            <p id="pg-links">{{ $departments->appends(['rowsPerPage' => $departments->perPage()])->links() }} </p>
         </div>
         <div id="warnings">
             @if(session()->has('message'))
             <span style="color: green;">{{ session()->get('message') }}</span>
+            @endif
+            @if(session()->has('error'))
+            <span style="color: red;">{{ session()->get('error') }}</span>
             @endif
             <p style="color: red;" class="warning"></p>
             @if($errors->any())
@@ -102,10 +93,10 @@
                     </tr>
                     <tr>
                         <td>Department Name : </td>
-                        <td><input type="text" name="dept_name" required id="inp11"></td>
+                        <td><input type="text" name="dept_name" required id="inp11" onkeyup="deptNameValidation(this.value)"></td>
                     </tr>
                     <tr>
-                        <td id="msg11" style="visibility: hidden; color: red;">alphabets only allowed</td>
+                        <td class="dept-msg" style="visibility: hidden; color: red;">alphabets only allowed</td>
                     </tr>
                     <tr>
                         <td></td>
@@ -117,6 +108,7 @@
     </div>
     <script src="https://kit.fontawesome.com/52bd1c8b9d.js" crossorigin="anonymous"></script>
     <script src="{{ asset('js/script.js') }}"></script>
+    <script src="{{ asset('js/validation.js') }}"></script>
     <script>
         function deleteDept(id) {
             var jsondata = JSON.stringify(id);

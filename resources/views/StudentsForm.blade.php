@@ -10,10 +10,10 @@
                 </tr>
                 <tr>
                     <td>Student Name : </td>
-                    <td><input type="text" id="inp21" class="inp" name="student_name" value="{{ $student->student_name }}" required></td>
+                    <td><input type="text" id="inp21" class="inp" name="student_name" value="{{ $student->student_name }}" required onkeyup="alphabetValidation(this.value, 0)"></td>
                 </tr>
                 <tr>
-                    <td id="msg21">alphabets only allowed</td>
+                    <td class="al-msgs">alphabets only allowed</td>
                 </tr>
                 <tr>
                     <td>Student Gender : </td>
@@ -21,53 +21,53 @@
                 </tr>
                 <tr>
                     <td>Student DOB : </td>
-                    <td><input type="date" id="dob2" class="inp" name="student_dob" value="{{ $student->student_dob }}" required></td>
+                    <td><input type="date" id="dob2" class="inp" name="student_dob" value="{{ $student->student_dob }}" required onblur="calculateAge(this)"><span style="margin-left: 8px;"></span></td>
                 </tr>
                 <tr>
-                    <td id="dob-msg2">select valid age</td>
+                    <td class="dob-msgs">select valid age</td>
                 </tr>
                 <tr>
                     <td>Student Mobile no. : </td>
-                    <td><input type="tel" id="mobile-no2" class="inp" name="mobile_no" value="{{ $student->mobile_no }}" required></td>
+                    <td><input type="tel" id="mobile-no2" class="inp" name="mobile_no" value="{{ $student->mobile_no }}" required onchange="mobileNumberValidation(this)"></td>
                 </tr>
                 <tr>
-                    <td id="mob-msg2">please enter valid mobile number</td>
+                    <td class="mob-msgs">please enter valid mobile number</td>
                 </tr>
                 <input type="tel" name="address_id" value="{{ $student->addresses->address_id }}" style="visibility: hidden;" required>
                 <tr>
                     <td>Street 1 : </td>
-                    <td><input type="text" id="inp22" class="inp" name="street_1" value="{{ $student->addresses->street_1 }}" required></td>
+                    <td><input type="text" id="inp22" class="inp" name="street_1" value="{{ $student->addresses->street_1 }}" required onkeyup="streetValidation(this.value, 0)"></td>
                 </tr>
                 <tr>
-                    <td id="msg22">alphabets only allowed</td>
+                    <td class="st-msgs">alphabets only allowed</td>
                 </tr>
                 <tr>
                     <td>Street 2 : </td>
-                    <td><input type="text" id="inp23" class="inp" name="street_2" value="{{ $student->addresses->street_2 }}" required></td>
+                    <td><input type="text" id="inp23" class="inp" name="street_2" value="{{ $student->addresses->street_2 }}" placeholder="Optional" onkeyup="streetValidation(this.value, 1)"></td>
                 </tr>
                 <tr>
-                    <td id="msg23">alphabets only allowed</td>
+                    <td class="st-msgs">alphabets only allowed</td>
                 </tr>
                 <tr>
                     <td>City : </td>
-                    <td><input type="text" id="inp24" class="inp" name="city" value="{{ $student->addresses->city }}" required></td>
+                    <td><input type="text" id="inp24" class="inp" name="city" value="{{ $student->addresses->city }}" required onkeyup="alphabetValidation(this.value, 1)"></td>
                 </tr>
                 <tr>
-                    <td id="msg24">alphabets only allowed</td>
+                    <td class="al-msgs">alphabets only allowed</td>
                 </tr>
                 <tr>
                     <td>State : </td>
-                    <td><input type="text" id="inp25" class="inp" name="state" value="{{ $student->addresses->state }}" required></td>
+                    <td><input type="text" id="inp25" class="inp" name="state" value="{{ $student->addresses->state }}" required onkeyup="alphabetValidation(this.value, 2)"></td>
                 </tr>
                 <tr>
-                    <td id="msg25">alphabets only allowed</td>
+                    <td class="al-msgs">alphabets only allowed</td>
                 </tr>
                 <tr>
                     <td>Country : </td>
-                    <td><input type="text" id="inp26" class="inp" name="country" value="{{ $student->addresses->country }}" required></td>
+                    <td><input type="text" id="inp26" class="inp" name="country" value="{{ $student->addresses->country }}" required onkeyup="alphabetValidation(this.value, 3)"></td>
                 </tr>
                 <tr>
-                    <td id="msg26">alphabets only allowed</td>
+                    <td class="al-msgs">alphabets only allowed</td>
                 </tr>
                 <tr>
                     <td>Student dept short code : </td>
@@ -81,7 +81,7 @@
                     </td>
                 </tr>
                 <tr>
-                    <td colspan="2" style="text-align: right; padding-right: 50px;"><input type="submit" value="Update" class="submit"></td>
+                    <td colspan="2" style="text-align: right; padding-right: 20px;"><input type="submit" value="Update" class="submit"></td>
                 </tr>
             </tbody>
         </table>

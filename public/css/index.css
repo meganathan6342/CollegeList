@@ -1,0 +1,49 @@
+.close-btn {
+    background-color: red;
+    color: white;
+    margin-left: 94%;
+    border: 0px;
+    border-radius: 4px;
+}
+
+.close-btn:hover {
+    background-color: rgb(214, 9, 9);
+}
+
+#addForm {
+    padding: 15px 25px;
+}
+
+#updateForm {
+    padding: 15px 25px;
+}
+
+#mydiv {
+    position: relative;
+    margin-left: 200px;
+}
+#warnings{
+    margin-left: 200px;
+}
+#validation-errors{
+    color: red;
+}
+
+.college-details {
+    position: absolute;
+    left: 460px;
+    border-style: none;
+    background-color: rgb(200, 200, 200);
+    padding: 0px 5px;
+    min-width: 200px;
+    border-radius: 5px;
+    visibility: hidden;
+}
+
+#search {
+    margin-left: 284px;
+}
+
+#pg-links {
+    margin-left: -50px;
+}

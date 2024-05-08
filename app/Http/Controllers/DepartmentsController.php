@@ -32,7 +32,10 @@ class DepartmentsController extends Controller
         if (is_array($dept)) {
             return redirect()->back()->withErrors($dept)->withInput();
         }
-        return redirect()->back()->with('message', 'dept is stored successfully!');
+        if (is_string($dept)) {
+            return redirect()->back()->with('error', $dept);
+        }
+        return redirect()->back()->with('message', 'stored department details..!');
     }
 
     public function edit(Request $request)
@@ -50,14 +53,17 @@ class DepartmentsController extends Controller
         if (is_array($dept)) {
             return redirect()->back()->withErrors($dept)->withInput();
         }
-        return redirect()->back()->with('message', 'dept details are updated successfully!');
+        if (is_string($dept)) {
+            return redirect()->back()->with('error', $dept);
+        }
+        return redirect()->back()->with('message', 'updated department details..!');
     }
     public function delete(Request $request)
     {
         $id = json_decode(urldecode($request->input('data')), true);
         $this->departmentsService->deleteDept($id);
 
-        return redirect()->back()->with('success', 'deleted college details suceessfully!');
+        return redirect()->back()->with('message', 'deleted department details..!');
     }
 
     public function search(Request $request)

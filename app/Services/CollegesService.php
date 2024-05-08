@@ -26,10 +26,11 @@ class CollegesService
     public function storeCollege($collegeData, $addressData)
     {
         $collegeValidator = Validator::make($collegeData, [
-            'college_name' => 'required|regex:/^[a-zA-Z\s]+$/|max:45',
+            'college_name' => 'required|regex:/^[a-zA-Z\s]+$/|unique:colleges|max:45',
         ], [
             'college_name.required' => 'college name is required',
             'college_name.regex' => 'alphabets only allowed',
+            'college_name.unique' => 'college is already presented',
             'college_name.max' => 'college name is too long',
         ]);
         if ($collegeValidator->fails()) {
@@ -39,7 +40,7 @@ class CollegesService
 
         $addressValidator = Validator::make($addressData, [
             'street_1' => 'required|regex:/^[a-zA-Z0-9\s]*$/|max:45',
-            'street_2' => 'regex:/^[a-zA-Z0-9\s]*$/|max:45',
+            'street_2' => 'nullable|regex:/^[a-zA-Z0-9\s]*$/|max:45',
             'city' => 'required|regex:/^[a-zA-Z\s]+$/|max:255',
             'state' => 'required|regex:/^[a-zA-Z\s]+$/|max:255',
             'country' => 'required|regex:/^[a-zA-Z\s]+$/|max:255',
@@ -83,7 +84,7 @@ class CollegesService
 
         $addressValidator = Validator::make($addressData, [
             'street_1' => 'required|regex:/^[a-zA-Z0-9\s]*$/|max:45',
-            'street_2' => 'regex:/^[a-zA-Z0-9\s]*$/|max:45',
+            'street_2' => 'nullable|regex:/^[a-zA-Z0-9\s]*$/|max:45',
             'city' => 'required|regex:/^[a-zA-Z\s]+$/|max:255',
             'state' => 'required|regex:/^[a-zA-Z\s]+$/|max:255',
             'country' => 'required|regex:/^[a-zA-Z\s]+$/|max:255',

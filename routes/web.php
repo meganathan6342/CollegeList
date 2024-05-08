@@ -17,16 +17,12 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-// Route::get('/', function () {
-//     return view('welcome');
-// });
-
 //college
 Route::get('/', CollegesController::class.'@index')->name('index');
-Route::post('/submit-college', CollegesController::class.'@store')->name('submit.clg');
-Route::get('/edit-college', CollegesController::class.'@edit')->name('clg.form');
-Route::put('/update-college/{id}', CollegesController::class.'@update')->name('update.college');
-Route::get('/delete-college', CollegesController::class.'@delete')->name('delete.college');
+Route::post('/submit-clg', CollegesController::class.'@store')->name('submit.clg');
+Route::get('/edit-clg', CollegesController::class.'@edit')->name('clg.form');
+Route::put('/update-clg/{id}', CollegesController::class.'@update')->name('update.clg');
+Route::get('/delete-clg', CollegesController::class.'@delete')->name('delete.clg');
 Route::get('/search-clg', CollegesController::class.'@search')->name('search.clg');
 
 //depts
@@ -46,7 +42,7 @@ Route::get('/delete-staff', StaffsController::class.'@delete')->name('delete.sta
 Route::get('/search-staff', StaffsController::class.'@search')->name('search.staff');
 
 //students
-Route::get('/students/{id}', StudentsController::class.'@index')->name('students.details');
+Route::get('/students/{id}', StudentsController::class.'@index')->name('student.details');
 Route::post('/submit-student', StudentsController::class.'@store')->name('submit.student');
 Route::get('/edit-student', StudentsController::class.'@edit')->name('student.form');
 Route::put('/update-student/{id}', StudentsController::class.'@update')->name('update.student');

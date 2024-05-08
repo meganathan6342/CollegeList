@@ -2,111 +2,107 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\AddressesModel;
-use App\Models\CollegesModel;
-use App\Models\DepartmentsModel;
-use App\Models\StudentsModel;
+use App\Services\StudentsService;
 use Illuminate\Http\Request;
 
 class StudentsController extends Controller
 {
-    public function index($id)
+    protected $studentsService;
+
+    public function __construct(StudentsService $studentsService)
     {
-        $college = CollegesModel::find($id);
-        $departments = DepartmentsModel::where('college_id', $id)->get();
-        $students = StudentsModel::where('college_id', $id)->get();
+        $this->studentsService = $studentsService;
+    }
+    public function index(Request $request, $college_id)
+    {
+        $college = $this->studentsService->getCollegeById($college_id);
+        $departments = $this->studentsService->getDeptsByCollegeId($college_id);
+        $perPage = $request->input('rowsPerPage', 5);
+        $students = $this->studentsService->getAllStudents($perPage, $college_id);
         return view('Students', ["college" => $college, "departments" => $departments, "students" => $students]);
     }
     public function store(Request $request)
     {
-        $request->validate([
-            'student_name' => 'regex:/^[\pL\s\-]+$/u',
-            'mobile_no' => 'regex:/^[6-9][0-9]{9}$/',
-        ], [
-            'student_name.regex' => 'alphabets only allowed for student name',
-            'mobile_no.required' => 'please enter a valid mobile number',
-        ]);
+        $street_1 = $request->input('street_1');
+        $street_2 = $request->input('street_2');
+        $city = $request->input('city');
+        $state = $request->input('state');
+        $country = $request->input('country');
 
-        try {
-            $cid = $request->input('college_id');
+        $addressData = array('street_1' => $street_1, 'street_2' => $street_2, 'city' => $city, 'state' => $state, 'country' => $country);
 
-            $address = new AddressesModel();
-            $address->street_1 = $request->input('street_1');
-            $address->street_2 = $request->input('street_2');
-            $address->city = $request->input('city');
-            $address->state = $request->input('state');
-            $address->country = $request->input('country');
-            $address->save();
+        $college_id = $request->input('college_id');
+        $student_name = $request->input('student_name');
+        $student_gender = $request->input('student_gender');
+        $student_dob = $request->input('student_dob');
+        $mobile_no = $request->input('mobile_no');
+        $dept_short_code = $request->input('dept_short_code');
 
-            $content = file_get_contents(storage_path('app/texts/generateValueForStudents.txt'));
+        $studentData = array('college_id' => $college_id, 'student_name' => $student_name, 'student_gender' => $student_gender, 'student_dob' => $student_dob, 'mobile_no' => $mobile_no, 'dept_short_code' => $dept_short_code);
 
-            $student = new StudentsModel();
-            $student->student_id = ($request->input('dept_short_code') . '_' . 'STD' . '_' . $content);
-            $student->student_name = $request->input('student_name');
-            $student->student_gender = $request->input('student_gender');
-            $student->student_dob = $request->input('student_dob');
-            $student->mobile_no = $request->input('mobile_no');
-            $student->address_id = AddressesModel::latest()->value('address_id');
-            $student->dept_short_code = $request->input('dept_short_code');
-            $student->college_id = $cid;
-            $student->save();
+        $student = $this->studentsService->storeStudent($studentData, $addressData);
 
-            $content++;
-            file_put_contents(storage_path('app/texts/generateValueForStudents.txt'), $content);
-
-            return redirect()->back()->with('message', 'stored student details successfully!');
-        } catch (\Throwable $th) {
-            return redirect()->back()->with('message', 'enter valid dept_short_code or check departments!');
+        if (is_array($student)) {
+            return redirect()->back()->withErrors($student)->withInput();
         }
-    }
-    public function updateStudent(Request $request, $id)
-    {
-        $request->validate([
-            'student_name' => 'regex:/^[\pL\s\-]+$/u',
-            'mobile_no' => 'regex:/^[6-9][0-9]{9}$/',
-        ], [
-            'student_name.regex' => 'alphabets only allowed for student name',
-            'mobile_no.required' => 'please enter a valid mobile number',
-        ]);
+        if (is_string($student)) {
+            return redirect()->back()->with('error', $student);
+        }
 
+        return redirect()->back()->with('message', 'stored student details..!');
+    }
+    public function edit(Request $request)
+    {
+        $student_id = $request->input('data');
+        $student = $this->studentsService->getStudentById($student_id);
+        $departments = $this->studentsService->getDeptsByCollegeId($student->college_id);
+        return view('StudentsForm', ["student" => $student, "departments" => $departments]);
+    }
+
+    public function update(Request $request, $student_id)
+    {
 
         $address_id = $request->input('address_id');
-        $address = AddressesModel::find($address_id);
-        $address->street_1 = $request->input('street_1');
-        $address->street_2 = $request->input('street_2');
-        $address->city = $request->input('city');
-        $address->state = $request->input('state');
-        $address->country = $request->input('country');
-        $address->save();
+        $street_1 = $request->input('street_1');
+        $street_2 = $request->input('street_2');
+        $city = $request->input('city');
+        $state = $request->input('state');
+        $country = $request->input('country');
 
-        $student = StudentsModel::find($id);
-        $student->student_name = $request->input('student_name');
-        $student->student_gender = $request->input('student_gender');
-        $student->student_dob = $request->input('student_dob');
-        $student->mobile_no = $request->input('mobile_no');
-        $student->address_id = $address_id;
-        $student->college_id = $request->input('college_id');
-        $student->dept_short_code = $request->input('dept_short_code');
-        $student->save();
+        $addressData = array('address_id' => $address_id, 'street_1' => $street_1, 'street_2' => $street_2, 'city' => $city, 'state' => $state, 'country' => $country);
 
-        return redirect()->back()->with('success', 'updated student details successfully!');
-    }
-    public function deleteStudents(Request $request)
-    {
-        $id = json_decode(urldecode($request->input('data')), true);
+        $college_id = $request->input('college_id');
+        $student_name = $request->input('student_name');
+        $student_gender = $request->input('student_gender');
+        $student_dob = $request->input('student_dob');
+        $mobile_no = $request->input('mobile_no');
+        $dept_short_code = $request->input('dept_short_code');
 
-        $student = StudentsModel::find($id);
-        if (!empty($student)) {
-            $student->delete();
+        $studentData = array('college_id' => $college_id, 'student_id' => $student_id, 'student_name' => $student_name, 'student_gender' => $student_gender, 'student_dob' => $student_dob, 'mobile_no' => $mobile_no, 'dept_short_code' => $dept_short_code);
+
+        $student = $this->studentsService->updateStudent($studentData, $addressData);
+
+        if (is_array($student)) {
+            return redirect()->back()->withErrors($student)->withInput();
+        }
+        if (is_string($student)) {
+            return redirect()->back()->with('error', $student);
         }
 
-        return redirect()->back()->with('success', 'deleted student details suceessfully!');
+        return redirect()->back()->with('message', 'updated student details..!');
     }
-    public function updateStdForm(Request $request)
+    public function delete(Request $request)
     {
-        $id = $request->input('data');
-        $student = StudentsModel::find($id);
-        $departments = DepartmentsModel::where('college_id', $student->college_id)->get();
-        return view('StudentsForm', ['student' => $student, "departments" => $departments]);
+        $student_id = json_decode(urldecode($request->input('data')), true);
+
+        $student = $this->studentsService->deleteStudent($student_id);
+
+        return redirect()->back()->with('message', 'deleted student details..!');
+    }
+    public function search(Request $request)
+    {
+        $value = $request->input('data');
+        $students = $this->studentsService->searchStudent($value);
+        return view('SearchedStudents', ["students" => $students]);
     }
 }

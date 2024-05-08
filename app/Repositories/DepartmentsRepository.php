@@ -24,22 +24,30 @@ class DepartmentsRepository
 
     public function store($data)
     {
-        $dept = new DepartmentsModel();
-        $dept->dept_short_code = $data['dept_short_code'];
-        $dept->dept_name = $data['dept_name'];
-        $dept->college_id = $data['college_id'];
-        $dept->save();
+        try {
+            $dept = new DepartmentsModel();
+            $dept->dept_short_code = $data['dept_short_code'];
+            $dept->dept_name = $data['dept_name'];
+            $dept->college_id = $data['college_id'];
+            $dept->save();
 
-        return $dept;
+            return $dept;
+        } catch (\Throwable $th) {
+            return 'department is already presented.. :(';
+        }
     }
 
     public function update($data)
     {
-        $department = DepartmentsModel::find($data['dept_short_code']);
-        $department->dept_name = $data['dept_name'];
-        $department->save();
+        try {
+            $department = DepartmentsModel::find($data['dept_short_code']);
+            $department->dept_name = $data['dept_name'];
+            $department->save();
 
-        return $department;
+            return $department;
+        } catch (\Throwable $th) {
+            return 'something went wrong.. :(';
+        }
     }
 
     public function delete($dept_short_code)

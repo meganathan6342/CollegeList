@@ -7,59 +7,39 @@
     <!-- Optional theme -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@3.3.7/dist/css/bootstrap-theme.min.css" integrity="sha384-rHyoN1iRsVXV4nD0JutlnGaslCJuC7uwjduW9SVrLvRYooPp2bWYgmgJQIXwl/Sp" crossorigin="anonymous">
 
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     <!-- Latest compiled and minified JavaScript -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@3.3.7/dist/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{{ $college->college_name }} Staff's</title>
     <link rel="stylesheet" href="{{ asset('css/style.css') }}" />
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-    <style>
-        .close-btn {
-            background-color: red;
-            color: white;
-            margin-left: 94%;
-            border: 0px;
-            border-radius: 4px;
-        }
-
-        .close-btn:hover {
-            background-color: rgb(214, 9, 9);
-        }
-
-        #addForm {
-            padding: 15px 25px;
-        }
-
-        #updateForm {
-            padding: 15px 25px;
-        }
-    </style>
+    <link rel="stylesheet" href="{{ asset('css/Staff_Student.css') }}" />
 </head>
 
 <body>
-    <div id="mydiv" style="margin-left: 3px;">
-        <h1>Staff's of {{ $college->college_name }} </h1>
+    <div id="mydiv">
+        <h3>Staff's of {{ $college->college_name }} </h3>
         <select id="rowsPerPage" onchange="changePerPage()">
             <option value="5" {{ $staffs->perPage() == 5 ? 'selected' : '' }}>5</option>
             <option value="10" {{ $staffs->perPage() == 10 ? 'selected' : '' }}>10</option>
             <option value="20" {{ $staffs->perPage() == 20 ? 'selected' : '' }}>20</option>
         </select>
-        <input type="text" id="search" onkeyup="searchData()" placeholder="Search" style="margin-left: 940px;">
-        <button id="add-btn" class="submit" style="color: white;" onclick="addPopup()">add staff</button><br><br>
+        <input type="text" id="search" onkeyup="searchData()" placeholder="Search">
+        <button id="add-btn" class="submit" onclick="addPopup()">add staff</button><br><br>
         <table id="dataTable">
             <thead>
                 <tr>
                     <th>No.</th>
-                    <th style="width: 150px;" onclick="shuffle(1)">Staff Name</th>
-                    <th style="width: 100px;">Staff ID</th>
-                    <th style="width: 80px;">Staff Gender</th>
-                    <th style="width: 80px;">Staff DOB</th>
+                    <th style="width: 150px;">Staff ID</th>
+                    <th style="width: 170px;" onclick="shuffle(1)">Staff Name</th>
+                    <th style="width: 60px;">Staff Gender</th>
+                    <th style="width: 60px;">Staff DOB</th>
                     <th style="width: 150px;">Staff Mobile no.</th>
                     <th style="width: 200px;">Staff Address</th>
-                    <th style="width: 150px;">College Name</th>
+                    <th style="width: 200px;">College Name</th>
                     <th style="width: 100px;">Staff Dept Name</th>
-                    <th style="width: 80px;">Action</th>
+                    <th style="width: 100px;">Action</th>
                 </tr>
             </thead>
             <tbody id="searchedData">
@@ -69,10 +49,10 @@
                 @forelse($staffs as $staff)
                 <tr>
                     <td>{{ $counter++ }}.</td>
-                    <td style="width: 150px;">{{ $staff->staff_name }}</td>
-                    <td style="width: 100px;">{{ $staff->staff_id }}</td>
-                    <td style="width: 80px;">{{ $staff->staff_gender }}</td>
-                    <td style="width: 80px;">{{ \Carbon\Carbon::parse($staff->staff_dob)->age }}</td>
+                    <td style="width: 150px;">{{ $staff->staff_id }}</td>
+                    <td style="width: 170px;">{{ $staff->staff_name }}</td>
+                    <td style="width: 60px;">{{ $staff->staff_gender }}</td>
+                    <td style="width: 60px;">{{ \Carbon\Carbon::parse($staff->staff_dob)->age }}</td>
                     <td style="width: 150px;">{{ $staff->mobile_no }}</td>
                     <td style="width: 200px;">{{ $staff->addresses->address_id }},
                         {{ $staff->addresses->street_1 }},
@@ -81,10 +61,10 @@
                         {{ $staff->addresses->state }},
                         {{ $staff->addresses->country }}
                     </td>
-                    <td style="width: 150px;">{{ $staff->colleges->college_name }}</td>
+                    <td style="width: 200px;">{{ $staff->colleges->college_name }}</td>
                     <td style="width: 100px;">{{ $staff->departments->dept_name }}</td>
-                    <td style="width: 80px;">
-                        <span title="edit" style="color: green;margin-left: 30px;" id="edit" onclick="editForm('<?php echo $staff->staff_id ?>'); addUpdatePopup();"><i class="fa-solid fa-pen-to-square"></i></span>
+                    <td style="width: 100px;">
+                        <span title="edit" style="color: green;margin-left: 20px;" id="edit" onclick="editForm('<?php echo $staff->staff_id ?>'); addUpdatePopup();"><i class="fa-solid fa-pen-to-square"></i></span>
                         <span title="delete" style="color: red;margin-left: 10px;" id="delete" onclick="deleteStaff('<?php echo $staff->staff_id ?>')"><i class="fa-solid fa-trash"></i></span>
                     </td>
                 </tr>
@@ -97,11 +77,14 @@
         </table>
         <div id="footer">
             <span>Showing 1 to {{ count($staffs) }} of {{ $staffs->total() }}</span>
-            <p id="pg-links" style="margin-left: 150px;">{{ $staffs->appends(['rowsPerPage' => $staffs->perPage()])->links() }} </p>
+            <p id="pg-links">{{ $staffs->appends(['rowsPerPage' => $staffs->perPage()])->links() }} </p>
         </div>
         <div id="warnings">
             @if(session()->has('message'))
-            <span style="color: green;" class="warning">{{ session()->get('message') }}</span>
+            <span style="color: green;">{{ session()->get('message') }}</span>
+            @endif
+            @if(session()->has('error'))
+            <span style="color: red;">{{ session()->get('error') }}</span>
             @endif
             <p style="color: red;" class="warning"></p>
             @if($errors->any())
@@ -124,10 +107,10 @@
                     <input type="tel" name="college_id" value="{{ $college->college_id }}" style="visibility: hidden;" class="inp" required>
                     <tr>
                         <td>Staff Name : </td>
-                        <td><input type="text" name="staff_name" id="inp11" class="inp" required></td>
+                        <td><input type="text" name="staff_name" id="inp11" class="inp" required onkeyup="alphabetValidation(this.value, 0)"></td>
                     </tr>
                     <tr>
-                        <td id="msg11">alphabets only allowed</td>
+                        <td class="al-msgs">alphabets only allowed</td>
                     </tr>
                     <tr>
                         <td>Staff Gender : </td>
@@ -135,52 +118,52 @@
                     </tr>
                     <tr>
                         <td>Staff DOB : </td>
-                        <td><input type="date" name="staff_dob" class="inp" id="dob1" onblur="calculateAge()"><span style="margin-left: 8px;"></span></td>
+                        <td><input type="date" name="staff_dob" class="inp" id="dob1" onblur="calculateAge(this)"><span style="margin-left: 8px;"></span></td>
                     </tr>
                     <tr>
-                        <td id="dob-msg1">select valid age</td>
+                        <td class="dob-msgs">select valid age</td>
                     </tr>
                     <tr>
                         <td>Staff Mobile no. : </td>
-                        <td><input type="tel" name="mobile_no" id="mobile-no1" class="inp" required></td>
+                        <td><input type="tel" name="mobile_no" id="mobile-no1" class="inp" required onchange="mobileNumberValidation(this)"></td>
                     </tr>
                     <tr>
-                        <td id="mob-msg1">please enter valid mobile number</td>
+                        <td class="mob-msgs">please enter valid mobile number</td>
                     </tr>
                     <tr>
                         <td>Street 1 : </td>
-                        <td><input type="text" name="street_1" id="inp12" class="inp" required></td>
+                        <td><input type="text" name="street_1" id="inp12" class="inp" required onkeyup="streetValidation(this.value, 0)"></td>
                     </tr>
                     <tr>
-                        <td id="msg12">special char not allowed</td>
+                        <td class="st-msgs">special chars not allowed</td>
                     </tr>
                     <tr>
                         <td>Street 2 : </td>
-                        <td><input type="text" name="street_2" id="inp13" class="inp" required></td>
+                        <td><input type="text" name="street_2" id="inp13" class="inp" placeholder="Optional" onkeyup="streetValidation(this.value, 1)"></td>
                     </tr>
                     <tr>
-                        <td id="msg13">special char not allowed</td>
+                        <td class="st-msgs">special chars not allowed</td>
                     </tr>
                     <tr>
                         <td>City : </td>
-                        <td><input type="text" name="city" id="inp14" class="inp" required></td>
+                        <td><input type="text" name="city" id="inp14" class="inp" required onkeyup="alphabetValidation(this.value, 1)"></td>
                     </tr>
                     <tr>
-                        <td id="msg14">alphabets only allowed</td>
+                        <td class="al-msgs">alphabets only allowed</td>
                     </tr>
                     <tr>
                         <td>State : </td>
-                        <td><input type="text" name="state" id="inp15" class="inp" required></td>
+                        <td><input type="text" name="state" id="inp15" class="inp" required onkeyup="alphabetValidation(this.value, 2)"></td>
                     </tr>
                     <tr>
-                        <td id="msg15">alphabets only allowed</td>
+                        <td class="al-msgs">alphabets only allowed</td>
                     </tr>
                     <tr>
                         <td>Country : </td>
-                        <td><input type="text" name="country" id="inp16" class="inp" required></td>
+                        <td><input type="text" name="country" id="inp16" class="inp" required onkeyup="alphabetValidation(this.value, 3)"></td>
                     </tr>
                     <tr>
-                        <td id="msg16">alphabets only allowed</td>
+                        <td class="al-msgs">alphabets only allowed</td>
                     </tr>
                     <tr>
                         <td>Select Depatment : </td>
@@ -193,7 +176,7 @@
                         </td>
                     </tr>
                     <tr>
-                        <td colspan="2" style="text-align: right; padding-right: 50px;"><input type="submit" value="Submit" class="submit"></td>
+                        <td colspan="2" style="text-align: right; padding-right: 20px;"><input type="submit" value="Submit" class="submit"></td>
                     </tr>
                 </tbody>
             </table>
@@ -201,6 +184,7 @@
     </div>
     <script src="https://kit.fontawesome.com/52bd1c8b9d.js" crossorigin="anonymous"></script>
     <script src="{{ asset('js/script.js') }}"></script>
+    <script src="{{ asset('js/validation.js') }}"></script>
     <script>
         function deleteStaff(id) {
             var jsondata = JSON.stringify(id);

@@ -45,8 +45,11 @@ class StaffsController extends Controller
         if (is_array($staff)) {
             return redirect()->back()->withErrors($staff)->withInput();
         }
+        if (is_string($staff)) {
+            return redirect()->back()->with('error', $staff);
+        }
 
-        return redirect()->back()->with('message', 'staff details are stored successfully..!');
+        return redirect()->back()->with('message', 'stored staff details..!');
     }
     public function edit(Request $request)
     {
@@ -77,13 +80,16 @@ class StaffsController extends Controller
 
         $staffData = array('college_id' => $college_id, 'staff_id' => $staff_id, 'staff_name' => $staff_name, 'staff_gender' => $staff_gender, 'staff_dob' => $staff_dob, 'mobile_no' => $mobile_no, 'dept_short_code' => $dept_short_code);
 
-        $staff = $this->staffsService->storeStaff($staffData, $addressData);
+        $staff = $this->staffsService->updateStaff($staffData, $addressData);
 
         if (is_array($staff)) {
             return redirect()->back()->withErrors($staff)->withInput();
         }
+        if (is_string($staff)) {
+            return redirect()->back()->with('error', $staff);
+        }
 
-        return redirect()->back()->with('message', 'staff details are stored successfully..!');
+        return redirect()->back()->with('message', 'updated staff details..!');
     }
     public function delete(Request $request)
     {
@@ -91,7 +97,7 @@ class StaffsController extends Controller
 
         $staff = $this->staffsService->deleteStaff($staff_id);
 
-        return redirect()->back()->with('message', 'deleted staff details suceessfully!');
+        return redirect()->back()->with('message', 'deleted staff details..!');
     }
     public function search(Request $request)
     {

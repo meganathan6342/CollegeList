@@ -32,7 +32,7 @@ class DepartmentsService
     public function storeDept($data)
     {
         $validator = Validator::make($data, [
-            'dept_name' => 'required|regex:/^[a-zA-Z\s.]+$/|unique:departments|max:25',
+            'dept_name' => 'required|regex:/^[a-zA-Z\s.]+$/|unique:departments|max:45',
         ], [
             'dept_name.required' => 'dept name is required',
             'dept_name.regex' => 'alphabets only allowed',
@@ -60,15 +60,26 @@ class DepartmentsService
         $clg_short_code = strtoupper($clg_short_code);
 
         $dept_name = $data['dept_name'];
-        $dwords = explode(" ", $dept_name);
         $dept_code = null;
-        if (count($dwords) > 1) {
-            foreach ($dwords as $word) {
-                $dept_code .= $word[0];
+        if (strpos($dept_name, '.') !== false) {
+            if (strlen($dept_name) < 6) {
+                $dept_code = strtoupper($dept_name);
+            } else {
+                $dwords = explode(" ", $dept_name);
+                $word = $dwords[1];
+                $dept_code = $word[0] . $word[1] . $word[2];
             }
         } else {
-            $dept_code = $dept_name[0] . $dept_name[1] . $dept_name[2];
+            $dwords = explode(" ", $dept_name);
+            if (count($dwords) > 1) {
+                foreach ($dwords as $word) {
+                    $dept_code .= $word[0];
+                }
+            } else {
+                $dept_code = $dept_name[0] . $dept_name[1] . $dept_name[2];
+            }
         }
+
         $dept_code = strtoupper($dept_code);
 
         $dept_short_code = $clg_short_code . '_' . $dept_code;

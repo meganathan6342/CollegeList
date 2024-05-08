@@ -3,17 +3,6 @@
     font-size: 14px;
 }
 
-#mydiv {
-    position: relative;
-    margin-left: 200px;
-}
-
-#warnings {
-    position: relative;
-    margin-left: 200px;
-    padding-top: 20px;
-}
-
 #mydiv table a {
     color: rgb(46, 55, 180);
     text-decoration: none;
@@ -39,52 +28,23 @@
 }
 
 #mydiv td {
-    border-bottom: 1px solid rgb(145, 144, 144);
+    border-bottom: 1px solid rgb(192, 191, 191);
     padding: 5px 10px;
 }
 
-#mydiv tr>th:nth-child(3) {
-    width: 250px;
+#searchedData tr>td:nth-child(2) {
+    background-color: rgb(245, 249, 252);
 }
 
-#mydiv tr>th:nth-child(4) {
-    width: 150px;
+#searchedData >tr:nth-child(odd) {
+    background-color: rgb(248, 248, 248);
+}
+#searchedData > tr:hover{
+    background-color: rgb(239, 239, 239);
 }
 
-#mydiv tr>th:nth-child(5) {
-    width: 100px;
-}
-
-#mydiv tr>th:nth-child(6) {
-    width: 100px;
-}
-
-#mydiv tr>td:nth-child(3) {
-    width: 250px;
-}
-
-#mydiv tr>td:nth-child(4) {
-    width: 150px;
-}
-
-#mydiv tr>td:nth-child(5) {
-    width: 100px;
-}
-
-#mydiv tr>td:last-child {
-    width: 100px;
-}
-
-#mydiv tr>td:nth-child(even) {
-    background-color: rgb(235, 244, 244);
-}
-
-#mydiv tbody>tr:nth-child(odd) {
-    background-color: rgb(244, 244, 244);
-}
-
-#btn1 {
-    margin-left: 10px;
+#searchedData > tr:hover td{
+    background-color: rgb(239, 239, 239);
 }
 
 #footer {
@@ -93,10 +53,6 @@
     margin-top: 20px;
     font-size: 18px;
     align-items: center;
-}
-
-#pg-links {
-    margin-right: -200px;
 }
 
 a {
@@ -124,22 +80,6 @@ a:hover {
 .submit:hover {
     transform: scale(1.02);
     background-color: rgb(0, 0, 230);
-}
-
-#search {
-    margin-left: 240px;
-    height: 23px;
-}
-
-.college-details {
-    position: absolute;
-    left: 400px;
-    border-style: none;
-    background-color: rgb(200, 200, 200);
-    padding: 0px 5px;
-    min-width: 200px;
-    border-radius: 5px;
-    visibility: hidden;
 }
 
 #backDrop {
@@ -179,34 +119,11 @@ a:hover {
     padding: 10px;
 }
 
-.close {
-    background-color: red;
-    color: white;
-    margin-left: 94%;
-    border: 0px;
-    border-radius: 4px;
-}
-
-.close:hover {
-    background-color: rgb(214, 9, 9);
-}
-
-#msg11,
-#msg12,
-#msg13,
-#msg14,
-#msg15,
-#msg16,
-#msg21,
-#msg22,
-#msg23,
-#msg24,
-#msg25,
-#msg26,
-#dob-msg1,
-#dob-msg2,
-#mob-msg1,
-#mob-msg2 {
+.al-msgs,
+.st-msgs,
+.mob-msgs,
+.dob-msgs,
+.dept-msg {
     visibility: hidden;
     color: red;
 }

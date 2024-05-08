@@ -1,0 +1,29 @@
+.close-btn {
+    background-color: red;
+    color: white;
+    margin-left: 94%;
+    border: 0px;
+    border-radius: 4px;
+}
+
+.close-btn:hover {
+    background-color: rgb(214, 9, 9);
+}
+
+#mydiv {
+    position: relative;
+    margin-left: 200px;
+}
+
+#search {
+    margin-left: 420px;
+}
+
+#pg-links {
+    margin-left: -70px;
+}
+
+#mydiv th,
+#mydiv td {
+    padding: 15px 10px;
+}
