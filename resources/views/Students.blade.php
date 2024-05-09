@@ -25,20 +25,21 @@
             <option value="10" {{ $students->perPage() == 10 ? 'selected' : '' }}>10</option>
             <option value="20" {{ $students->perPage() == 20 ? 'selected' : '' }}>20</option>
         </select>
-        <input type="text" id="search" onkeyup="searchData()" placeholder="Search">
+        <span style="font-size: 14px;">entries per page</span>
+        <input type="text" id="search" onkeyup="searchData()" onblur="reload()" placeholder="Search">
         <button id="add-btn" class="submit" onclick="addPopup()">add student</button><br><br>
         <table id="dataTable">
             <thead>
                 <tr>
                     <th>No.</th>
                     <th style="width: 150px;">Student ID</th>
-                    <th style="width: 170px;" onclick="shuffle(1)">Student Name</th>
-                    <th style="width: 60px;">Student Gender</th>
-                    <th style="width: 60px;">Student DOB</th>
-                    <th style="width: 150px;">Student Mobile no.</th>
-                    <th style="width: 200px;">Student Address</th>
+                    <th style="width: 170px;" onclick="shuffle(2)">Student Name</th>
+                    <th style="width: 60px;">Gender</th>
+                    <th style="width: 60px;" onclick="shuffle(4)">DOB</th>
+                    <th style="width: 150px;">Mobile no.</th>
+                    <th style="width: 200px;">Address</th>
                     <th style="width: 200px;">College Name</th>
-                    <th style="width: 100px;">Student Dept Name</th>
+                    <th style="width: 100px;">Dept Name</th>
                     <th style="width: 100px;">Action</th>
                 </tr>
             </thead>
@@ -106,7 +107,7 @@
             <table>
                 <tbody>
                     <tr>
-                        <td><input type="tel" name="college_id" value="{{ $college->college_id }}" style="visibility: hidden;"></td>
+                        <td><input type="text" name="college_id" value="{{ $college->college_id }}" style="visibility: hidden;"></td>
                     </tr>
                     <tr>
                         <td>Student Name : </td>

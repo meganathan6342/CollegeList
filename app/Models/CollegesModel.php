@@ -13,6 +13,8 @@ class CollegesModel extends Model
 
     protected $primaryKey = 'college_id';
 
+    public $incrementing = false;
+
     protected $fillable = ['college_name'];
 
     public function addresses()

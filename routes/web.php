@@ -20,7 +20,7 @@ use Illuminate\Support\Facades\Route;
 //college
 Route::get('/', CollegesController::class.'@index')->name('index');
 Route::post('/submit-clg', CollegesController::class.'@store')->name('submit.clg');
-Route::get('/edit-clg', CollegesController::class.'@edit')->name('clg.form');
+Route::post('/edit-clg', CollegesController::class.'@edit')->name('clg.form');
 Route::put('/update-clg/{id}', CollegesController::class.'@update')->name('update.clg');
 Route::get('/delete-clg', CollegesController::class.'@delete')->name('delete.clg');
 Route::get('/search-clg', CollegesController::class.'@search')->name('search.clg');

@@ -61,6 +61,12 @@ function shuffle(n) {
         }
     }
 }
+
+function reload() {
+    console.log("hi");
+    window.location.reload();
+}
+
 function addPopup() {
     document.getElementById("addForm").style.visibility = "visible";
     document.getElementById("addForm").style.top = "50%";

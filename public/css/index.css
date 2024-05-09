@@ -1,13 +1,24 @@
+:root{
+    --red: red;
+    --hover-red: #D60909;
+    --green: green;
+    --blue: blue;
+    --white: white;
+}
+h1{
+    margin-bottom: 40px;
+}
+
 .close-btn {
-    background-color: red;
-    color: white;
+    background-color: var(--red);
+    color: var(--white);
     margin-left: 94%;
     border: 0px;
     border-radius: 4px;
 }
 
 .close-btn:hover {
-    background-color: rgb(214, 9, 9);
+    background-color: var(--hover-red);
 }
 
 #addForm {
@@ -26,14 +37,16 @@
     margin-left: 200px;
 }
 #validation-errors{
-    color: red;
+    color: var(--red);
 }
 
 .college-details {
     position: absolute;
     left: 460px;
     border-style: none;
-    background-color: rgb(200, 200, 200);
+    background-color: rgb(199, 242, 250);
+    border-left: 1px solid rgb(200, 200, 200);
+    border-right: 1px solid rgb(200, 200, 200);
     padding: 0px 5px;
     min-width: 200px;
     border-radius: 5px;
@@ -41,7 +54,7 @@
 }
 
 #search {
-    margin-left: 284px;
+    margin-left: 334px;
 }
 
 #pg-links {

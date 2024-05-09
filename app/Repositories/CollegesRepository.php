@@ -29,6 +29,8 @@ class CollegesRepository
             $address->save();
 
             $college = new CollegesModel();
+            $college->college_id = $collegeData['college_id'];
+            $college->college_short_code = $collegeData['college_short_code'];
             $college->college_name = $collegeData['college_name'];
             $college->address_id = AddressesModel::latest()->value('address_id');
             $college->save();
@@ -51,6 +53,7 @@ class CollegesRepository
             $address->save();
 
             $college = CollegesModel::find($collegeData['college_id']);
+            $college->college_short_code = $collegeData['college_short_code'];
             $college->college_name = $collegeData['college_name'];
             $college->save();
 

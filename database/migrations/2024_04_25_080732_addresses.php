@@ -20,6 +20,24 @@ return new class extends Migration
             $table->string('country');
             $table->timestamps();
         });
+
+        Schema::table('addresses', function (Blueprint $table) {
+            $table->foreign('student_id')
+                ->references('address_id')->on('students')
+                ->onDelete('cascade');
+        });
+
+        Schema::table('addresses', function (Blueprint $table) {
+            $table->foreign('staff_id')
+                ->references('address_id')->on('staffs')
+                ->onDelete('cascade');
+        });
+
+        Schema::table('addresses', function (Blueprint $table) {
+            $table->foreign('college_id')
+                ->references('address_id')->on('colleges')
+                ->onDelete('cascade');
+        });
     }
 
     /**

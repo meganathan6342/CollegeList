@@ -5,6 +5,7 @@
         @method('PUT')
         <table>
             <tbody>
+                <input type="text" name="college_id" value="{{ $department->colleges->college_id }}" style="visibility: hidden;">
                 <tr>
                     <td>Department Name : </td>
                     <td><input type="text" id="inp21" name="dept_name" value="{{ $department->dept_name }}" required onkeyup="deptNameValidation(this.value)"></td>

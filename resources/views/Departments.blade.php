@@ -25,7 +25,8 @@
             <option value="10" {{ $departments->perPage() == 10 ? 'selected' : '' }}>10</option>
             <option value="20" {{ $departments->perPage() == 20 ? 'selected' : '' }}>20</option>
         </select>
-        <input type="text" id="search" onkeyup="searchData()" placeholder="Search">
+        <span style="font-size: 14px;">entries per page</span>
+        <input type="text" id="search" onkeyup="searchData()" onblur="reload()" placeholder="Search">
         <button id="add-btn" class="submit" onclick="addPopup()">add dept</button><br><br>
         <table id="dataTable">
             <thead>
@@ -89,7 +90,7 @@
             <table>
                 <tbody>
                     <tr>
-                        <td><input type="tel" name="college_id" value="{{ $college->college_id }}" style="visibility: hidden;" required></td>
+                        <td><input type="text" name="college_id" value="{{ $college->college_id }}" style="visibility: hidden;" required></td>
                     </tr>
                     <tr>
                         <td>Department Name : </td>

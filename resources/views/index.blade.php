@@ -12,6 +12,7 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@3.3.7/dist/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="csrf-token" content="{{ csrf_token() }}">
     <title>College Home Page</title>
     <link rel="stylesheet" href="{{ asset('css/style.css') }}" />
     <link rel="stylesheet" href="{{ asset('css/index.css') }}" />
@@ -26,14 +27,14 @@
                 <option value="10" {{ $colleges->perPage() == 10 ? 'selected' : '' }}>10</option>
                 <option value="20" {{ $colleges->perPage() == 20 ? 'selected' : '' }}>20</option>
             </select>
-            <span style="font-size: 16px;">entries per page</span>
-            <input type="text" id="search" onkeyup="searchData()" placeholder="Search">
+            <span style="font-size: 14px;">entries per page</span>
+            <input type="text" id="search" onkeyup="searchData()" onblur="reload()" placeholder="Search">
             <button id="add-btn" class="submit" style="color: white;" onclick="addPopup()">add college</button><br><br>
             <table id="dataTable">
                 <thead>
                     <tr>
                         <th>No.</th>
-                        <th style="width: 300px;" onclick="shuffle(1)">College</th>
+                        <th style="width: 300px;" onclick="shuffle(1)">College Name</th>
                         <th style="width: 300px;">Address</th>
                         <th style="width: 150px;">Action</th>
                     </tr>
@@ -164,11 +165,18 @@
             window.location.href = "{{ route('delete.clg') }}?data=" + encodedata;
         }
 
+
+        $.ajaxSetup({
+            headers: {
+                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+            }
+        });
+
         function editForm(id) {
             $(document).ready(function() {
                 $.ajax({
                     url: "{{route('clg.form')}}",
-                    type: 'GET',
+                    type: 'POST',
                     data: {
                         data: id
                     },

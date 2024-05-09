@@ -65,7 +65,31 @@ class CollegesService
             return $errors;
         }
 
-        return $this->collegesRepository->store($collegeData, $addressData);
+        $college_name = $collegeData['college_name'];
+
+        $cwords = explode(" ", $college_name);
+        $clg_short_code = null;
+        if (count($cwords) > 1) {
+            foreach ($cwords as $word) {
+                $clg_short_code .= $word[0];
+            }
+        } else {
+            $clg_short_code = $college_name[0] . $college_name[1] . $college_name[2];
+        }
+        $clg_short_code = strtoupper($clg_short_code);
+
+        $content = file_get_contents(storage_path('app/texts/generateValueForColleges.txt'));
+        $college_id = $clg_short_code . '_' . $content;
+        $collegeData['college_short_code'] = $clg_short_code;
+        $collegeData['college_id'] = $college_id;
+
+        $college = $this->collegesRepository->store($collegeData, $addressData);
+
+        if (is_array($college)) {
+            $content++;
+            file_put_contents(storage_path('app/texts/generateValueForColleges.txt'), $content);
+        }
+        return $college;
     }
 
     public function updateCollege($collegeData, $addressData)
@@ -109,12 +133,41 @@ class CollegesService
             return $errors;
         }
 
-        return $this->collegesRepository->update($collegeData, $addressData);
+        $college_name = $collegeData['college_name'];
+
+        $cwords = explode(" ", $college_name);
+        $clg_short_code = null;
+        if (count($cwords) > 1) {
+            foreach ($cwords as $word) {
+                $clg_short_code .= $word[0];
+            }
+        } else {
+            $clg_short_code = $college_name[0] . $college_name[1] . $college_name[2];
+        }
+        $clg_short_code = strtoupper($clg_short_code);
+
+        $content = file_get_contents(storage_path('app/texts/generateValueForColleges.txt'));
+        $college_id = $clg_short_code . '_' . $content;
+        $collegeData['college_short_code'] = $clg_short_code;
+        $collegeData['college_id'] = $college_id;
+
+        $college = $this->collegesRepository->update($collegeData, $addressData);
+
+        if (is_array($college)) {
+            $content++;
+            file_put_contents(storage_path('app/texts/generateValueForColleges.txt'), $content);
+        }
+        return $college;
     }
 
     public function deleteCollege($college_id)
     {
-        return $this->collegesRepository->delete($college_id);
+        $college = $this->collegesRepository->delete($college_id);
+        if (!empty($college)) {
+            $content = file_get_contents(storage_path('app/texts/generateValueForColleges.txt'));
+            $content--;
+            file_put_contents(storage_path('app/texts/generateValueForColleges.txt'), $content);
+        }
     }
 
     public function searchCollege($value)

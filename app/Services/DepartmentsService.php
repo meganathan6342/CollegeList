@@ -92,7 +92,7 @@ class DepartmentsService
     public function updateDept($data)
     {
         $validator = Validator::make($data, [
-            'dept_name' => 'required|regex:/^[a-zA-Z\s.]+$/|unique:departments|max:15',
+            'dept_name' => 'required|regex:/^[a-zA-Z\s.]+$/|unique:departments|max:45',
         ], [
             'dept_name.required' => 'dept name is required',
             'dept_name.regex' => 'alphabets only allowed',

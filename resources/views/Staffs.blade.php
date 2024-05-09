@@ -25,20 +25,21 @@
             <option value="10" {{ $staffs->perPage() == 10 ? 'selected' : '' }}>10</option>
             <option value="20" {{ $staffs->perPage() == 20 ? 'selected' : '' }}>20</option>
         </select>
-        <input type="text" id="search" onkeyup="searchData()" placeholder="Search">
+        <span style="font-size: 14px;">entries per page</span>
+        <input type="text" id="search" onkeyup="searchData()" onblur="reload()" placeholder="Search">
         <button id="add-btn" class="submit" onclick="addPopup()">add staff</button><br><br>
         <table id="dataTable">
             <thead>
                 <tr>
                     <th>No.</th>
                     <th style="width: 150px;">Staff ID</th>
-                    <th style="width: 170px;" onclick="shuffle(1)">Staff Name</th>
-                    <th style="width: 60px;">Staff Gender</th>
-                    <th style="width: 60px;">Staff DOB</th>
-                    <th style="width: 150px;">Staff Mobile no.</th>
-                    <th style="width: 200px;">Staff Address</th>
+                    <th style="width: 170px;" onclick="shuffle(2)">Staff Name</th>
+                    <th style="width: 60px;">Gender</th>
+                    <th style="width: 60px;" onclick="shuffle(4)">DOB</th>
+                    <th style="width: 150px;">Mobile no.</th>
+                    <th style="width: 200px;">Address</th>
                     <th style="width: 200px;">College Name</th>
-                    <th style="width: 100px;">Staff Dept Name</th>
+                    <th style="width: 100px;">Dept Name</th>
                     <th style="width: 100px;">Action</th>
                 </tr>
             </thead>
@@ -104,7 +105,7 @@
             @csrf
             <table>
                 <tbody>
-                    <input type="tel" name="college_id" value="{{ $college->college_id }}" style="visibility: hidden;" class="inp" required>
+                    <input type="text" name="college_id" value="{{ $college->college_id }}" style="visibility: hidden;" class="inp" required>
                     <tr>
                         <td>Staff Name : </td>
                         <td><input type="text" name="staff_name" id="inp11" class="inp" required onkeyup="alphabetValidation(this.value, 0)"></td>

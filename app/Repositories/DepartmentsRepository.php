@@ -46,7 +46,7 @@ class DepartmentsRepository
 
             return $department;
         } catch (\Throwable $th) {
-            return 'something went wrong.. :(';
+            return $th->getMessage();
         }
     }
 

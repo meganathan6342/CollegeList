@@ -14,13 +14,25 @@ return new class extends Migration
         Schema::create('departments', function (Blueprint $table) {
             $table->string('dept_short_code')->primary();
             $table->string('dept_name');
-            $table->unsignedBigInteger('college_id');
+            $table->string('college_id');
             $table->foreign('college_id')->references('college_id')->on('colleges')->onDelete('cascade');
             $table->timestamps();
         });
 
         Schema::table('departments', function (Blueprint $table) {
             $table->unique('dept_short_code');
+        });
+
+        Schema::table('departments', function (Blueprint $table) {
+            $table->foreign('staff_id')
+                ->references('dept_short_code')->on('staff_id')
+                ->onDelete('cascade');
+        });
+
+        Schema::table('departments', function (Blueprint $table) {
+            $table->foreign('student_id')
+                ->references('dept_short_code')->on('student_id')
+                ->onDelete('cascade');
         });
     }
 

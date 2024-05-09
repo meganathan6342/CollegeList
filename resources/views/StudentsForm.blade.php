@@ -6,7 +6,7 @@
         <table>
             <tbody>
                 <tr>
-                    <td><input type="tel" class="inp" name="college_id" value="{{ $student->college_id }}" style="visibility: hidden;" required></td>
+                    <td><input type="text" class="inp" name="college_id" value="{{ $student->college_id }}" style="visibility: hidden;" required></td>
                 </tr>
                 <tr>
                     <td>Student Name : </td>

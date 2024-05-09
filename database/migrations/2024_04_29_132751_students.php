@@ -19,7 +19,7 @@ return new class extends Migration
             $table->bigInteger('mobile_no');
             $table->unsignedBigInteger('address_id');
             $table->foreign('address_id')->references('address_id')->on('addresses')->onDelete('cascade');
-            $table->unsignedBigInteger('college_id');
+            $table->string('college_id');
             $table->foreign('college_id')->references('college_id')->on('colleges')->onDelete('cascade');
             $table->string('dept_short_code');
             $table->foreign('dept_short_code')->references('dept_short_code')->on('departments')->onDelete('cascade');
